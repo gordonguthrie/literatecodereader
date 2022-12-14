@@ -1,2 +1,3 @@
-# literatecodereader
-a compiler for turning ordinary code into literate code for reading
+# Literate Code Reader
+
+A compiler for turning ordinary code into literate code for reading
