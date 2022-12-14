@@ -7,6 +7,8 @@ defmodule LiterateCompiler.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
+      escript: [main_module: LiterateCompiler.CLI,
+                comment: "an escript that compiles code to literal HTML for reading"],
       deps: deps()
     ]
   end
