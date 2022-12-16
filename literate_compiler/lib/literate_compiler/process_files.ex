@@ -37,7 +37,7 @@ defmodule LiterateCompiler.ProcessFiles do
 		{:ok, bin} = File.read(file)
 		lines = String.split(bin, "\n")
 		f = process_lines(lines, langmodule, :none, @empty_accumulator, @empty_accumulator)
-		{file, f}
+		{file, List.flatten(f)}
 	end
 
 	defp process_lines([], _, _type, [], acc) do

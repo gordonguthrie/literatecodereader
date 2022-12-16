@@ -8,4 +8,6 @@ defmodule LiterateCompiler.Outputter.Markdown do
 		Enum.join(["```", js_extension, contents, "```\n"])
 	end
 
+	def wrap(contents), do: contents
+
 end

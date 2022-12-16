@@ -30,7 +30,8 @@ defmodule LiterateCompiler.Outputter do
 		lines = for {type, level, contents} <- body, level <= print_type do
 			Kernel.apply(outputter, :format, [type, contents, language])
 		end
-		Enum.join(lines, "\n")
+		newbody = Enum.join(lines, "\n")
+		Kernel.apply(outputter, :wrap, [newbody])
 	end
 
 
