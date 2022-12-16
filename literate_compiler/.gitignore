@@ -26,3 +26,4 @@ literate_compiler-*.tar
 /tmp/
 
 literate_compiler
+!literate_compiler/

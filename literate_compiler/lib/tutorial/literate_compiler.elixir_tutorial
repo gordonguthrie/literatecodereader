@@ -1,0 +1,53 @@
+### This escript generates markdown - this is a heading
+
+## It supports the native comment structure of whatever the programming language is
+## These include `@moduledoc` and `@doc`
+
+@doc this is a document comment
+@moduledoc this is a module comment
+
+@doc """This is a multiline document comment
+         so it is
+         how are ye
+     """
+
+@moduledoc """This is a multiline module comment
+         I am grand
+         grand so I am
+     """
+
+## The first two `##` are stripped off and the rest of the text
+## is turned into markdown.
+##
+## Note that single `#` comments (in Elixir) are not processed
+
+# (This comment won't be turned into markdown or html)
+
+#### Second Heading
+
+##### Third Heading
+
+###### Fourth Heading
+
+####### Fifth Heading
+
+######## Sixth Heading
+
+## All other markdown constructs are supported.
+##
+## lists
+## * item 1
+## * item 2
+##
+## numbered lists
+## * item 1
+## * item
+##
+## and also **bold** and *italic* etc
+
+## and any code in the file will be wrapped in a `pre` tag
+
+def parse_args(args) do
+    acc = %LiterateCompiler.Args{}
+    parse_args(args, acc)
+end

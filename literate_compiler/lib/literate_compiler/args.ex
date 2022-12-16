@@ -1,9 +1,11 @@
 defmodule LiterateCompiler.Args do
    defstruct [
-      inputdir:   :nil,
-      outputdir:  :nil,
-      help:       false, 
-      errors:     []
+      inputdir:    :nil,
+      outputdir:   :nil,
+      print_files: false,
+      help:        false,
+      print_type:  0,
+      errors:      []
    ]
 
    def parse_args(args) do
@@ -11,13 +13,66 @@ defmodule LiterateCompiler.Args do
       parse_args(args, acc)
    end
 
+   def print_help() do
+    lines = [
+      "Help",
+      "",
+      "literate compiler is a script that converts code into beautiful webpages to read",
+      "either directly as HTML or as markdown for github to convert to GitHub pages",
+      "",
+      "Options:",
+      "-h --help       prints this message",
+      "                (optional)",
+      "",
+      "-i --inputdir   the root directory of the code",
+      "                defaults to the current directory",
+      "",
+      "-l --list       doesn't process the files, just prints them",
+      "                (optional)",
+      "",
+      "-o --outputdir  the directory to output the html",
+      "                defaults to the current directory",
+      "",
+      "-t --type       the type of output 0, 1 or 2",
+      "                optional - defaults to 0",
+      "                0 is all comments shown",
+      "                1 is some comments surpressed",
+      "                2 is maximum comments supressed",
+      "                see the documentation of a particular language extension",
+      "                for details",
+      "",
+      "All options (except help) take exactly one argument",
+      "",
+      "Either the inputdir or the outputdir must be set explicitly",
+      "",
+      "Examples:",
+      "./literate_compiler -o /some/dir/for/output",
+      "./literate_compiler --outputdir /some/dir/for/output",
+      "./literate_compiler -i /some/dir/for/output -o /some/dir/for/output",
+      "./literate_compiler --help",
+      "./literate_compiler -i /some/dir/for/output -l",
+      ""
+    ]
+    for x <- lines, do: IO.puts(x)
+   end
+
+   def print_errors(parsedargs) do
+    IO.puts("script did not run because of the following errors:")
+    for x <- parsedargs.errors, do: IO.puts(x)
+    IO.puts("")
+   end
+
    defp parse_args([],                     args), do: validate(args)
-   defp parse_args(["-h"             | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:      true})
-   defp parse_args(["--help"         | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:      true})
-   defp parse_args(["-i"         , i | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:  i})
-   defp parse_args(["--inputdir" , i | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:  i})
-   defp parse_args(["-o"         , o | t], args), do: parse_args(t, %LiterateCompiler.Args{args | outputdir: o})
-   defp parse_args(["--outputdir", o | t], args), do: parse_args(t, %LiterateCompiler.Args{args | outputdir: o})
+   defp parse_args(["-h"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
+   defp parse_args(["--help"          | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
+   defp parse_args(["-i"         , i  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:    i})
+   defp parse_args(["--inputdir" , i  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:    i})
+   defp parse_args(["-l"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | print_files: true})
+   defp parse_args(["--list"          | t], args), do: parse_args(t, %LiterateCompiler.Args{args | print_files: true})
+   defp parse_args(["-o"         , o  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | outputdir:   o})
+   defp parse_args(["--outputdir", o  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | outputdir:   o})
+   defp parse_args(["-t"         , ty | t], args), do: parse_args(t, %LiterateCompiler.Args{args | print_type:  ty})
+   defp parse_args(["--type"     , ty | t], args), do: parse_args(t, %LiterateCompiler.Args{args | print_type:  ty})
    defp parse_args([h | t], args) do
       error = case h do
           <<"-", _rest::binary>> -> "unknown option #{h}"

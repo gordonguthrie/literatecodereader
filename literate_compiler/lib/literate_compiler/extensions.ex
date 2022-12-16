@@ -1,11 +1,13 @@
 defmodule LiterateCompiler.Extensions do
 
-	def get_comment_marker(".erl"), do: "%"
-	def get_comment_marker(".hrl"), do: "%"
-	def get_comment_marker(".xrl"), do: "%"
-	def get_comment_marker(".yrl"), do: "%"
-	def get_comment_marker(".ex"),  do: "#"
-	def get_comment_marker(".exs"), do: "#"
-	def get_comment_marker(_),      do: :none
+	def get_lang_module(".ex"),              do: LiterateCompiler.Languages.Elixir_lang
+	def get_lang_module(".exs"),             do: LiterateCompiler.Languages.Elixir_lang
+	def get_lang_module(".elixir_tutorial"), do: LiterateCompiler.Languages.Elixir_lang
+	def get_lang_module(".erl"),             do: LiterateCompiler.Languages.Erlang
+	def get_lang_module(".hrl"),             do: LiterateCompiler.Languages.Erlang
+	def get_lang_module(".xrl"),             do: LiterateCompiler.Languages.Erlang
+	def get_lang_module(".yrl"),             do: LiterateCompiler.Languages.Erlang
+	def get_lang_module(".erlang_tutorial"), do: LiterateCompiler.Languages.Erlang
+	def get_lang_module(_),                  do: :none
 
 end
