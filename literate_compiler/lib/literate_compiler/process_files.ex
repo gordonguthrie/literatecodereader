@@ -27,9 +27,9 @@ defmodule LiterateCompiler.ProcessFiles do
 	generates the outcome that is specified in the command line options.
 	"""
 	def process_file(file) do
-	  ext = Path.extname(file)
-	  langmodule = Extensions.get_lang_module(ext)
-	  process(file, langmodule)
+	 	ext = Path.extname(file)
+	 	langmodule = Extensions.get_lang_module(ext)
+	 	process(file, langmodule)
 	end
 
 	defp process(_file, :none), do: []
@@ -73,7 +73,7 @@ defmodule LiterateCompiler.ProcessFiles do
 		{[{newt, line}], acc}
 	end
 	defp accumulate(line, type, _, langmodule, partial, acc) do
-		newfrag = make_frag(partial, langmodule)
+		newfrag = make_frag(Enum.reverse(partial), langmodule)
 		{[{type, line}], [newfrag |acc]}
 	end
 

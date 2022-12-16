@@ -1,6 +1,7 @@
 defmodule LiterateCompiler.CLI do
 
   alias LiterateCompiler.Args
+  alias LiterateCompiler.Outputter
   alias LiterateCompiler.ProcessFiles
   alias LiterateCompiler.Tree
 
@@ -24,7 +25,7 @@ defmodule LiterateCompiler.CLI do
   defp run(parsedargs) do
       IO.inspect(parsedargs, label: "in run")
       files = Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.process_file/1)
-      IO.inspect(files, label: "files")
+      :ok = Outputter.write_output(files, parsedargs)
   end
 
 end

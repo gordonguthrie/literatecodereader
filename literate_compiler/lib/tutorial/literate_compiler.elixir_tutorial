@@ -3,18 +3,17 @@
 ## It supports the native comment structure of whatever the programming language is
 ## These include `@moduledoc` and `@doc`
 
-@doc this is a document comment
-@moduledoc this is a module comment
-
-@doc """This is a multiline document comment
-         so it is
-         how are ye
-     """
+@moduledoc this is a module comment - level 1 in this formatter
+@doc this is a document comment - level 2 in this formatter
 
 @moduledoc """This is a multiline module comment
-         I am grand
-         grand so I am
+         In this Elixir formatter module comments am a level 1 comment
      """
+
+@doc """This is a multiline document comment
+         In this Elixir formatter document comments are a level 2 comment
+     """
+
 
 ## The first two `##` are stripped off and the rest of the text
 ## is turned into markdown.
@@ -40,8 +39,8 @@
 ## * item 2
 ##
 ## numbered lists
-## * item 1
-## * item
+## 1 item 1
+## 2 item
 ##
 ## and also **bold** and *italic* etc
 

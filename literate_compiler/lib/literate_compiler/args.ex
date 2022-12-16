@@ -4,6 +4,7 @@ defmodule LiterateCompiler.Args do
       outputdir:   :nil,
       print_files: false,
       help:        false,
+      format:      "markdown",
       print_type:  0,
       errors:      []
    ]
@@ -23,6 +24,10 @@ defmodule LiterateCompiler.Args do
       "Options:",
       "-h --help       prints this message",
       "                (optional)",
+      "-f --format     specify what the script should output [markdown | html]",
+      "                if you are intending to publish on github pages",
+      "                set to markdown",
+      "                (optional - default markdown)",
       "",
       "-i --inputdir   the root directory of the code",
       "                defaults to the current directory",
@@ -65,6 +70,8 @@ defmodule LiterateCompiler.Args do
    defp parse_args([],                     args), do: validate(args)
    defp parse_args(["-h"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
    defp parse_args(["--help"          | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
+   defp parse_args(["-f"         , f  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | format:      f})
+   defp parse_args(["--format"   , f  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | format:      f})
    defp parse_args(["-i"         , i  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:    i})
    defp parse_args(["--inputdir" , i  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:    i})
    defp parse_args(["-l"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | print_files: true})
@@ -85,7 +92,9 @@ defmodule LiterateCompiler.Args do
    defp validate(args) do
       args
       |> validate_usage
+      |> validate_formats
       |> validate_paths
+      |> validate_print_type
    end
 
    defp validate_usage(args) do
@@ -96,6 +105,13 @@ defmodule LiterateCompiler.Args do
          {_,    :nil} -> %{args | outputdir: "./"}
          {_,    _}    ->   args
       end
+   end
+
+   defp validate_formats(%{format: "markdown"} = args), do: args
+   defp validate_formats(%{format: "html"} = args), do: args
+   defp validate_formats(%{format: other, errors: e} = args) do
+      error = "invalid output format, must be html or markdown: #{other}"
+      %{args | errors: [error | e]}
    end
 
    defp validate_paths(%{errors: []} = args) do
@@ -112,4 +128,13 @@ defmodule LiterateCompiler.Args do
       end
    end
    defp validate_paths(args), do: args
+
+   defp validate_print_type(%{print_type:  p} = args) do
+      case Integer.parse(p) do
+         {n, ""} -> %{args | print_type: n}
+         {n, _}  -> %{args | errors: "print level must be an integer #{p}"}
+         err     -> %{args | errors: "print level must be an integer #{err}"}
+      end
+   end
+
 end
