@@ -21,6 +21,8 @@ defmodule LiterateCompiler.Languages.Elixir_lang do
 	defp is_c(<<"@doc ",             r::binary>>), do: {{:fn,      :line},  r}
 	defp is_c(<<"##", 				 r::binary>>), do: {{:comment, :line},  String.trim(r)}
 	defp is_c(<<"\"\"\"", 			 r::binary>>), do: {{:comment, :close}, r}
-	defp is_c(c),                                  do: {:code,              c}
+	defp is_c(c),                                  do: {:code,              expand(c)}
+
+	defp expand(c), do: String.replace(c, "{{", "{ {", [global: true])
 
 end

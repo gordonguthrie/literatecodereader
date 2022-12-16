@@ -1,3 +1,4 @@
+
 # The directory Mix will write compiled artifacts to.
 /_build/
 
@@ -27,3 +28,4 @@ literate_compiler-*.tar
 
 literate_compiler
 !literate_compiler/
+mix.lock
