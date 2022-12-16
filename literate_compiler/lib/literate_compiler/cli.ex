@@ -19,11 +19,11 @@ defmodule LiterateCompiler.CLI do
   defp run(parsedargs) when parsedargs.print_files do
       IO.inspect(parsedargs, label: "in run")
       IO.puts("The following files will be processed:")
-      Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.list_file/2, parsedargs)
+      Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.list_file/1)
     end
   defp run(parsedargs) do
       IO.inspect(parsedargs, label: "in run")
-      files = Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.process_file/2, parsedargs)
+      files = Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.process_file/1)
       IO.inspect(files, label: "files")
   end
 

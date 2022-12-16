@@ -2,18 +2,18 @@ defmodule LiterateCompiler.Tree do
 
 	@empty_accumulator []
 
-  def walk_tree(directorylist, fun, fnargs), do: walk_tree(directorylist, fun, fnargs, @empty_accumulator)
+  def walk_tree(directorylist, fun), do: walk_tree(directorylist, fun, @empty_accumulator)
 
-  defp walk_tree([], _fun, _fnargs, acc), do: acc
-  defp walk_tree([h | t], fun, fnargs, acc) do
+  defp walk_tree([], _fun, acc), do: acc
+  defp walk_tree([h | t], fun, acc) do
     newacc = case File.dir?(h) do
       true  -> wildcard = Path.join(h, "*")
                entries = Path.wildcard(wildcard)
-               Enum.flat_map(entries, fn x -> walk_tree([x], fun, fnargs, acc) end)
-      false -> file = fun.(h, fnargs)
+               Enum.flat_map(entries, fn x -> walk_tree([x], fun, acc) end)
+      false -> file = fun.(h)
                [file | acc]
     end
-    walk_tree(t, fun, fnargs, newacc)
+    walk_tree(t, fun, newacc)
   end
 
 end

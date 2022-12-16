@@ -8,6 +8,11 @@ defmodule LiterateCompiler.Languages.Elixir_lang do
 		end
 	end
 
+	def comment_level(:code),         do: 0
+	def comment_level({:comment, _}), do: 0
+	def comment_level({:module, _}),  do: 1
+	def comment_level({:fn, _}),      do: 2
+
 	defp is_c(<<"@moduledoc \"\"\"", r::binary>>), do: {{:module,  :open},  r}
 	defp is_c(<<"@moduledoc ",       r::binary>>), do: {{:module,  :line},  r}
 	defp is_c(<<"@doc \"\"\"",       r::binary>>), do: {{:fn,      :open},  r}

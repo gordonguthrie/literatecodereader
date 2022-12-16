@@ -13,7 +13,7 @@ defmodule LiterateCompiler.ProcessFiles do
 	will be processed. It checks the file extension and if that sort of
 	file is processed it will be printed - if not it won't.
 	"""
-	def list_file(file, _args) do
+	def list_file(file) do
 	  ext = Path.extname(file)
 	  langmodule = Extensions.get_lang_module(ext)
 	  case langmodule do
@@ -26,77 +26,77 @@ defmodule LiterateCompiler.ProcessFiles do
 	`process_file` is a function that just actually process all the source code files and
 	generates the outcome that is specified in the command line options.
 	"""
-	def process_file(file, args) do
+	def process_file(file) do
 	  ext = Path.extname(file)
 	  langmodule = Extensions.get_lang_module(ext)
-	  process(file, langmodule, args)
+	  process(file, langmodule)
 	end
 
-	defp process(_file, :none, _args), do: []
-	defp process(file, langmodule, args) do
+	defp process(_file, :none), do: []
+	defp process(file, langmodule) do
 		{:ok, bin} = File.read(file)
 		lines = String.split(bin, "\n")
-		process_lines(lines, langmodule, args, :none, @empty_accumulator, @empty_accumulator)
+		process_lines(lines, langmodule, :none, @empty_accumulator, @empty_accumulator)
 	end
 
-	defp process_lines([], _, _args, _type, [], acc) do
+	defp process_lines([], _, _type, [], acc) do
 		Enum.reverse(acc)
 	end
-	defp process_lines([], _,  args, _type, partialacc, acc) do
+	defp process_lines([], langmodule, _type, partialacc, acc) do
 		partial = Enum.reverse(partialacc)
-		frag = make_frag(partial, args)
+		frag = make_frag(partial, langmodule)
 	 	Enum.reverse([frag | acc])
 	end
 	# the open multiline comment line is already on the partial accumulator
 	# so we steal it back
-	defp process_lines(lines, langmodule, args, {ty, :open}, [{_, steal} | partialacc], acc) do
-		{glob, rest} = gobble([steal | lines], ty, langmodule, args, [])
-		newfrag1 = make_frag(glob, args)
-		newfrag2 = make_frag(partialacc, args)
-		process_lines(rest, langmodule, args, :none, [], [newfrag2, newfrag1 | acc])
+	defp process_lines(lines, langmodule, {ty, :open}, [{_, steal} | partialacc], acc) do
+		{glob, rest} = gobble([steal | lines], ty, langmodule, [])
+		newfrag1 = make_frag(glob, langmodule)
+		newfrag2 = make_frag(partialacc, langmodule)
+		process_lines(rest, langmodule, :none, [], [newfrag2, newfrag1 | acc])
 	end
-	defp process_lines([h | t], langmodule, args, type, partialacc, acc) do
-		{newt, newl} = process_line(langmodule, h, args)
-		{newpartial, newacc} = accumulate(newl, newt, type, args, partialacc, acc)
-		process_lines(t, langmodule, args, newt, newpartial, newacc)
-	end
-
-	defp process_line(typefn, line, _args) do
-		Kernel.apply(typefn, :is_comment, [line])
+	defp process_lines([h | t], langmodule, type, partialacc, acc) do
+		{newt, newl} = process_line(langmodule, h)
+		{newpartial, newacc} = accumulate(newl, newt, type, langmodule, partialacc, acc)
+		process_lines(t, langmodule, newt, newpartial, newacc)
 	end
 
-	defp accumulate(line, type, type, _args, partial, acc) do
+	defp process_line(langmodule, line) do
+		Kernel.apply(langmodule, :is_comment, [line])
+	end
+
+	defp accumulate(line, type, type, _, partial, acc) do
 		{[{type, line} | partial], acc}
 	end
-	defp accumulate(line, {_, :open} = newt, _type, _args, [], acc) do
+	defp accumulate(line, {_, :open} = newt, _type, _, [], acc) do
 		{[{newt, line}], acc}
 	end
-	defp accumulate(line, type, _, args, partial, acc) do
-		newfrag = make_frag(partial, args)
+	defp accumulate(line, type, _, langmodule, partial, acc) do
+		newfrag = make_frag(partial, langmodule)
 		{[{type, line}], [newfrag |acc]}
 	end
 
-	defp gobble([], ty, _langmodule, _args, acc) do
+	defp gobble([], ty, _langmodule, acc) do
 		{{{ty, :block}, Enum.reverse(acc)}, []}
 	end
-	defp gobble([h | t], ty, langmodule, args, acc) do
-		{newt, newl} = process_line(langmodule, h, args)
+	defp gobble([h | t], ty, langmodule, acc) do
+		{newt, newl} = process_line(langmodule, h)
 		case {newt, newl} do
 			{{_, :close}, _} ->
 				comments = {{ty, :block}, Enum.reverse([{newt, newl} | acc])}
 				{comments, t}
 			_ ->
 			 	newacc = [{newt, newl} | acc]
-				gobble(t, ty, langmodule, args, newacc)
+				gobble(t, ty, langmodule, newacc)
 		end
 	end
 
-	defp make_frag({{type, :block}, lines}, args) do
-		make_tag(type, gather_lines(lines), args)
+	defp make_frag({{type, :block} = ty, lines}, langmodule) do
+		make_tag(ty, gather_lines(lines), langmodule)
 	end
-	defp make_frag(lines, args) do
+	defp make_frag(lines, langmodule) do
 		tag = get_tag(lines)
-		make_tag(tag, gather_lines(lines), args)
+		make_tag(tag, gather_lines(lines), langmodule)
 	end
 
 	defp gather_lines(lines) do
@@ -107,9 +107,15 @@ defmodule LiterateCompiler.ProcessFiles do
 	defp get_tag([]),              do: :none
 	defp get_tag([{tag, _} | _t]), do: tag
 
-	defp make_tag(_,     <<"">>, _args), do: []
-	defp make_tag(:none, _lines, _args), do: []
-	defp make_tag(:code,  lines, _args), do: {:code, lines}
-	defp make_tag(_,      lines, _args), do: {:markdown, lines}
+	defp make_tag(_,     <<"">>, langmodule), do: []
+	defp make_tag(:none, _lines, langmodule), do: []
+	defp make_tag(:code,  lines, langmodule) do
+		level = Kernel.apply(langmodule, :comment_level, [:code])
+	 	{:code, level, lines}
+	end
+	defp make_tag(type, lines, langmodule) do
+		level = Kernel.apply(langmodule, :comment_level, [type])
+	 	{:markdown, level, lines}
+	end
 
 end
