@@ -36,7 +36,8 @@ defmodule LiterateCompiler.ProcessFiles do
 	defp process(file, langmodule) do
 		{:ok, bin} = File.read(file)
 		lines = String.split(bin, "\n")
-		process_lines(lines, langmodule, :none, @empty_accumulator, @empty_accumulator)
+		f = process_lines(lines, langmodule, :none, @empty_accumulator, @empty_accumulator)
+		{file, f}
 	end
 
 	defp process_lines([], _, _type, [], acc) do
@@ -91,7 +92,7 @@ defmodule LiterateCompiler.ProcessFiles do
 		end
 	end
 
-	defp make_frag({{type, :block} = ty, lines}, langmodule) do
+	defp make_frag({{_type, :block} = ty, lines}, langmodule) do
 		make_tag(ty, gather_lines(lines), langmodule)
 	end
 	defp make_frag(lines, langmodule) do
@@ -107,9 +108,9 @@ defmodule LiterateCompiler.ProcessFiles do
 	defp get_tag([]),              do: :none
 	defp get_tag([{tag, _} | _t]), do: tag
 
-	defp make_tag(_,     <<"">>, langmodule), do: []
-	defp make_tag(:none, _lines, langmodule), do: []
-	defp make_tag(:code,  lines, langmodule) do
+	defp make_tag(_,     <<"">>, _langmodule), do: []
+	defp make_tag(:none, _lines, _langmodule), do: []
+	defp make_tag(:code,  lines,  langmodule) do
 		level = Kernel.apply(langmodule, :comment_level, [:code])
 	 	{:code, level, lines}
 	end
