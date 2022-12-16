@@ -14,7 +14,7 @@ services:
       - "4000:4000"
     volumes:
       - type: bind
-        source: ./literate_compiler
+        source: ./
         target: /literate_compiler
       - ${SSH_AUTH_SOCK}:/ssh-agent
       # for xwindows

@@ -107,7 +107,7 @@ defmodule LiterateCompiler.Args do
       end
    end
 
-   defp validate_formats(%{format: "markdown"} = args), do: args
+   defp validate_formats(%{format: "markdown"} = args), do: %{args | format: "md"}
    defp validate_formats(%{format: "html"} = args), do: args
    defp validate_formats(%{format: other, errors: e} = args) do
       error = "invalid output format, must be html or markdown: #{other}"
@@ -132,7 +132,7 @@ defmodule LiterateCompiler.Args do
    defp validate_print_type(%{print_type:  p} = args) do
       case Integer.parse(p) do
          {n, ""} -> %{args | print_type: n}
-         {n, _}  -> %{args | errors: "print level must be an integer #{p}"}
+         {_, _}  -> %{args | errors: "print level must be an integer #{p}"}
          err     -> %{args | errors: "print level must be an integer #{err}"}
       end
    end

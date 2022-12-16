@@ -10,7 +10,7 @@
 	def get_lang_module(".erlang_tutorial"), do: LiterateCompiler.Languages.Erlang
 	def get_lang_module(_),                  do: :none
 
-	def get_formatter_module("markdown"), do: LiterateCompiler.Outputter.Markdown
-	def get_formatter_module("html"),     do: LiterateCompiler.Outputter.HTML
+	def get_formatter_module("md"),   do: LiterateCompiler.Outputter.Markdown
+	def get_formatter_module("html"), do: LiterateCompiler.Outputter.HTML
 
 end```
