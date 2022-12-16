@@ -3,7 +3,7 @@ defmodule LiterateCompiler.Languages.Elixir_lang do
 	def is_comment(line) do
 		{newt, newl} = is_c(String.trim(line))
 		case newt do
-			:code -> {newt, line}
+			:code -> {newt, expand(line)}
 			_     -> {newt, newl}
 		end
 	end
@@ -21,7 +21,7 @@ defmodule LiterateCompiler.Languages.Elixir_lang do
 	defp is_c(<<"@doc ",             r::binary>>), do: {{:fn,      :line},  r}
 	defp is_c(<<"##", 				 r::binary>>), do: {{:comment, :line},  String.trim(r)}
 	defp is_c(<<"\"\"\"", 			 r::binary>>), do: {{:comment, :close}, r}
-	defp is_c(c),                                  do: {:code,              expand(c)}
+	defp is_c(c),                                  do: {:code,              c}
 
 	defp expand(c), do: String.replace(c, "{{", "{ {", [global: true])
 

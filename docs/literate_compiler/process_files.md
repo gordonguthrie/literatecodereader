@@ -81,13 +81,13 @@
 	end
 
 	defp gobble([], ty, _langmodule, acc) do
-		{{{ty, :block}, Enum.reverse(acc)}, []}
+		{ {{ty, :block}, Enum.reverse(acc)}, []}
 	end
 	defp gobble([h | t], ty, langmodule, acc) do
 		{newt, newl} = process_line(langmodule, h)
 		case {newt, newl} do
-			{{_, :close}, _} ->
-				comments = {{ty, :block}, Enum.reverse([{newt, newl} | acc])}
+			{ {_, :close}, _} ->
+				comments = { {ty, :block}, Enum.reverse([{newt, newl} | acc])}
 				{comments, t}
 			_ ->
 			 	newacc = [{newt, newl} | acc]
@@ -95,7 +95,7 @@
 		end
 	end
 
-	defp make_frag({{_type, :block} = ty, lines}, langmodule) do
+	defp make_frag({ {_type, :block} = ty, lines}, langmodule) do
 		make_tag(ty, gather_lines(lines), langmodule)
 	end
 	defp make_frag(lines, langmodule) do
