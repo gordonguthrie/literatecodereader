@@ -43,13 +43,13 @@ end
 
 # Contents
 
-#jekyll <div>
-#jekyll {% for item in site.data.contents.toc %}
-#jekyll     <h3>{{ item.title }}</h3>
-#jekyll       <ul>
-#jekyll         {% for entry in item.subfolderitems %}
-#jekyll           <li><a href="{{ entry.url }}">{{ entry.page }}</a></li>
-#jekyll         {% endfor %}
-#jekyll       </ul>
-#jekyll   {% endfor %}
-#jekyll </div>
+ <div>
+ {% for item in site.data.contents.toc %}
+     <h3>{{ item.title }}</h3>
+       <ul>
+         {% for entry in item.subfolderitems %}
+           <li><a href="{{ entry.url }}">{{ entry.page }}</a></li>
+         {% endfor %}
+       </ul>
+   {% endfor %}
+ </div>
