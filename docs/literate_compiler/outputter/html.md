@@ -1,5 +1,4 @@
-```
-elixirdefmodule LiterateCompiler.Outputter.HTML do
+defmodule LiterateCompiler.Outputter.HTML do
 
 	def format(:markdown, contents, _language) do
 		:markdown.conv_utf8(contents)
@@ -22,10 +21,8 @@ elixirdefmodule LiterateCompiler.Outputter.HTML do
 				])
 	end
 
-	defp css() do```
-
-```
-elixir<style>
+	defp css() do
+<style>
 html, body {
     padding: 2.5em;
     margin: auto;
@@ -157,9 +154,7 @@ hr {
 pre[class*="language-"] {
     overflow-wrap: break-word;
 }
-</style>```
+</style>
+end
 
-```
-elixirend
-
-end```
+end

@@ -1,24 +1,19 @@
-```
-elixirdefmodule LiterateCompiler.ProcessFiles do
-```
+defmodule LiterateCompiler.ProcessFiles do
 
 
 	This is the ProcessFiles module for the Literate Compiler
 
-```
-elixir
+
 	@empty_accumulator []
 
 	alias LiterateCompiler.Extensions
-```
 
 
 	`list_file` is a function that just prints all the files that
 	will be processed. It checks the file extension and if that sort of
 	file is processed it will be printed - if not it won't.
 
-```
-elixir	def list_file(file) do
+	def list_file(file) do
 	  ext = Path.extname(file)
 	  langmodule = Extensions.get_lang_module(ext)
 	  case langmodule do
@@ -26,14 +21,12 @@ elixir	def list_file(file) do
 	  	_     -> IO.inspect(file)
 	  end
 	end
-```
 
 
 	`process_file` is a function that just actually process all the source code files and
 	generates the outcome that is specified in the command line options.
 
-```
-elixir	def process_file(file) do
+	def process_file(file) do
 	 	ext = Path.extname(file)
 	 	langmodule = Extensions.get_lang_module(ext)
 	 	process(file, langmodule)
@@ -126,4 +119,4 @@ elixir	def process_file(file) do
 	 	{:markdown, level, lines}
 	end
 
-end```
+end

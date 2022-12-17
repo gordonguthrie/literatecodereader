@@ -1,5 +1,4 @@
-```
-elixirdefmodule LiterateCompiler.Outputter do
+defmodule LiterateCompiler.Outputter do
 
 	alias LiterateCompiler.Extensions
 
@@ -37,4 +36,4 @@ elixirdefmodule LiterateCompiler.Outputter do
 
 
 
-end```
+end
