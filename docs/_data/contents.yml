@@ -1,9 +1,9 @@
 toc:
   - title: Contents
     subfolderitems:
-    - page: lib - index
-      url:  lib/index.html
-      - title: literate_compiler
+      - page: lib - index
+        url:  lib/index.html
+    - title: literate_compiler
       subfolderitems:
         - page: lib - literate_compiler - args
         url:  lib/literate_compiler/args.html
