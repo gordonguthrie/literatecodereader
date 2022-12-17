@@ -51,7 +51,7 @@ def parse_args(args) do
     parse_args(args, acc)
 end
 
-# Contents
+## Contents
 
 #jekyll <div>
 #jekyll {% for item in site.data.contents.toc %}

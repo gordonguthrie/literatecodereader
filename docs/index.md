@@ -42,10 +42,9 @@ def parse_args(args) do
     acc = %LiterateCompiler.Args{}
     parse_args(args, acc)
 end
-
-# Contents
 ```
 
+Contents
  <div>
  {% for item in site.data.contents.toc %}
      <h3>{{ item.title }}</h3>
