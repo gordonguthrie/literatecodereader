@@ -59,10 +59,10 @@ defmodule LiterateCompiler.TOC do
 		page = Enum.join(["- page: ", newp, " - MODULE ",fileroot])
 
 		# make the URL
-		[_ | relpath] = Enum.reverse(rest)
+		path = Enum.reverse(rest)
 		root = Path.rootname(file)
 		file = Enum.join([root, ".", "html"])
-		url = Enum.join(relpath ++ [file], "/")
+		url = Enum.join(path ++ [file], "/")
 		urlline = Enum.join(["url:  ", url], "/")
 
 		# return them
