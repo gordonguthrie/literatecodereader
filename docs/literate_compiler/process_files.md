@@ -1,10 +1,12 @@
-```elixirdefmodule LiterateCompiler.ProcessFiles do
+```
+elixirdefmodule LiterateCompiler.ProcessFiles do
 ```
 
 
 	This is the ProcessFiles module for the Literate Compiler
 
-```elixir
+```
+elixir
 	@empty_accumulator []
 
 	alias LiterateCompiler.Extensions
@@ -15,7 +17,8 @@
 	will be processed. It checks the file extension and if that sort of
 	file is processed it will be printed - if not it won't.
 
-```elixir	def list_file(file) do
+```
+elixir	def list_file(file) do
 	  ext = Path.extname(file)
 	  langmodule = Extensions.get_lang_module(ext)
 	  case langmodule do
@@ -29,7 +32,8 @@
 	`process_file` is a function that just actually process all the source code files and
 	generates the outcome that is specified in the command line options.
 
-```elixir	def process_file(file) do
+```
+elixir	def process_file(file) do
 	 	ext = Path.extname(file)
 	 	langmodule = Extensions.get_lang_module(ext)
 	 	process(file, langmodule)
@@ -81,7 +85,7 @@
 	end
 
 	defp gobble([], ty, _langmodule, acc) do
-		{ {{ty, :block}, Enum.reverse(acc)}, []}
+		{ { {ty, :block}, Enum.reverse(acc)}, []}
 	end
 	defp gobble([h | t], ty, langmodule, acc) do
 		{newt, newl} = process_line(langmodule, h)

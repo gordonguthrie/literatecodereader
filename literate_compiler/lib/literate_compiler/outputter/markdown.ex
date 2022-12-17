@@ -5,7 +5,7 @@ defmodule LiterateCompiler.Outputter.Markdown do
 	end
 	def format(:code, contents, language) do
 		js_extension = Kernel.apply(language, :get_js_ext, [])
-		Enum.join(["```", js_extension, contents, "```\n"])
+		Enum.join(["```\n", js_extension, contents, "```\n"])
 	end
 
 	def wrap(contents), do: contents

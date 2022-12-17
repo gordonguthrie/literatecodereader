@@ -1,4 +1,5 @@
-```elixirdefmodule LiterateCompiler.Tree do
+```
+elixirdefmodule LiterateCompiler.Tree do
 
 	@empty_accumulator []
 
