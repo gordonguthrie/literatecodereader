@@ -26,6 +26,14 @@
 ```
 
 
+	`make_contents` is a function that generates the table of contents for jekyll.
+
+```elixir	def make_jekyll_contents(file) do
+		String.split(file, "/")
+	end
+```
+
+
 	`process_file` is a function that just actually process all the source code files and
 	generates the outcome that is specified in the command line options.
 

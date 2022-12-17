@@ -44,7 +44,7 @@ def parse_args(args) do
 end
 ```
 
-Contents
+## Contents
  <div>
  {% for item in site.data.contents.toc %}
      <h3>{{ item.title }}</h3>

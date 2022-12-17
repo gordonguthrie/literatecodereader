@@ -2,39 +2,96 @@
 
 	@empty_accumulator []
 
-	def make_toc(files, _parsedargs) do
+	def make_toc(files, parsedargs) do
 		split = split(files, @empty_accumulator)
 		sorted = Enum.sort(split, &sorter/2)
 		toc = build_tree(sorted, @empty_accumulator)
-		for x <- toc, do: IO.puts(x)
+		# the toc starts with a line 'toc:' and a title and subfolder
+		header = ["    subfolderitems:",
+				  "  - title: Contents",
+				  "toc:"]
+		# we start indenting at 2 because the header has an indent in it
+		file = indent(toc, 1, 2, header)
+		fileandpath = Path.join([parsedargs.outputdir, "_data/contents.yml"])
+		write_dir = Path.dirname(fileandpath)
+		:ok = File.mkdir_p(write_dir)
+		File.write(fileandpath, Enum.join(file, "\n"))
+	end
+
+	defp indent([], _n, _padn, acc), do: Enum.reverse(acc)
+	defp indent([{{:url, n}, line} | t], n, padn, acc) do
+		newacc = pad(line, padn + 1)
+		indent(t, n, padn, [newacc | acc])
+	end
+	defp indent([{{:url, n1}, line} | t], n2, padn, acc) do
+		newpad = if n1 < n2 do
+					padn - 1
+				 else
+				 	padn
+				 end
+		newacc = pad(line, newpad)
+		indent(t, n1, newpad, [newacc | acc])
+	end
+	defp indent([{:title, line} | t], n, padn, acc) do
+		newacc = pad(line, padn + 1)
+		indent(t, n, padn + 1, [newacc | acc])
+	end
+	defp indent([{:sub, line} | t], n, padn, acc) do
+		newacc = pad(line, padn)
+		indent(t, n, padn + 1, [newacc | acc])
+	end
+	defp indent([{:page, line} | t], n, padn, acc) do
+		newacc = pad(line, padn)
+		indent(t, n, padn, [newacc | acc])
 	end
 
 	defp build_tree([{path, file} | []], acc) do
-		line = get_line(path ++ [file])
-		Enum.reverse([line | acc])
+		{page, url} = get_components(path ++ [file])
+		len = length(path)
+		newacc = [{{:url, len}, url}, {:page, page}]
+		Enum.reverse(newacc ++ acc)
 	end
 	defp build_tree([{path1, file1}, {path2, _file2} = h2 | t], acc) do
 		len1 = length(path1)
 		len2 = length(path2)
-		line = get_line(path1 ++ [file1])
+		{page, url} = get_components(path1 ++ [file1])
 		case len1 do
-		  ^len2 -> build_tree([h2 | t], [line | acc])
-		  _     -> build_tree([h2 | t], [line | acc])
+		  ^len2 ->
+		  	newacc = [{{:url, len1}, url}, {:page, page}]
+		  	build_tree([h2 | t], newacc ++ acc)
+		  _     ->
+		  	title = hd(Enum.reverse(path2))
+		  	tit = Enum.join(["- title: ", title])
+		  	sub = "subfolderitems:"
+		  	newacc = [{:sub, sub},         {:title, tit},
+		  			  {{:url, len1}, url}, {:page, page}]
+		  	build_tree([h2 | t], newacc ++ acc)
 		end
 	end
 
-	defp get_line(path) do
+	defp get_components(path) do
+
+		# do some setup
 		rev = Enum.reverse(path)
 		[file | rest] = rev
 		newp = Enum.join(Enum.reverse(rest), " - ")
-		filename = Path.rootname(file)
-		line = Enum.join(["-page: ", newp, " - ",filename])
-		length = length(path)
-		pad(line, length)
+		fileroot = Path.rootname(file)
+
+		# make the page
+		page = Enum.join(["- page: ", newp, " - ",fileroot])
+
+		# make the URL
+		filename = Enum.join([fileroot, ".html"])
+		urlpath = Enum.reverse([filename | rest])
+		url = Enum.join(urlpath, "/")
+		urlline = Enum.join(["url:  ", url])
+
+		# return them
+		{page, urlline}
 	end
 
 	defp pad(line, n) do
-		pad =  String.duplicate(" ", (n + 1) * 2)
+		pad =  String.duplicate(" ", n * 2)
 		Enum.join([pad, line])
 	end
 

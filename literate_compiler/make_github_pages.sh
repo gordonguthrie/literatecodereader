@@ -1,2 +1,2 @@
 #!/bin/bash
-mix escript.build && ./literate_compiler -i ./lib/ -o ../docs/ -t 2
+mix escript.build && ./literate_compiler --inputdir ./lib/ --outputdir ../docs/ --type 2 --jekyll
