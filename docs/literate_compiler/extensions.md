@@ -1,4 +1,5 @@
-```elixirdefmodule LiterateCompiler.Extensions do
+```elixir
+defmodule LiterateCompiler.Extensions do
 
 	def get_lang_module(".ex"),              do: LiterateCompiler.Languages.Elixir_lang
 	def get_lang_module(".exs"),             do: LiterateCompiler.Languages.Elixir_lang
@@ -13,4 +14,5 @@
 	def get_formatter_module("md"),   do: LiterateCompiler.Outputter.Markdown
 	def get_formatter_module("html"), do: LiterateCompiler.Outputter.HTML
 
-end```
+end
+```

@@ -1,4 +1,5 @@
-```elixirdefmodule LiterateCompiler.Args do
+```elixir
+defmodule LiterateCompiler.Args do
    defstruct [
       inputdir:    :nil,
       outputdir:   :nil,
@@ -144,4 +145,5 @@
       end
    end
 
-end```
+end
+```

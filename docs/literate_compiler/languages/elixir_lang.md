@@ -1,4 +1,5 @@
-```elixirdefmodule LiterateCompiler.Languages.Elixir_lang do
+```elixir
+defmodule LiterateCompiler.Languages.Elixir_lang do
 
 	def is_comment(line) do
 		{newt, newl} = is_c(String.trim(line))
@@ -32,4 +33,5 @@
 		end
 	end
 
-end```
+end
+```

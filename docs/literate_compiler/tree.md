@@ -1,4 +1,5 @@
-```elixirdefmodule LiterateCompiler.Tree do
+```elixir
+defmodule LiterateCompiler.Tree do
 
 	@empty_accumulator []
 
@@ -16,4 +17,5 @@
     walk_tree(t, fun, newacc)
   end
 
-end```
+end
+```
