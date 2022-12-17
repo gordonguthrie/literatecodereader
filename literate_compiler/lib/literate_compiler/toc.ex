@@ -55,7 +55,7 @@
 		fileroot = Path.rootname(file)
 
 		# make the page
-		page = Enum.join(["- page: ", newp, " - module: ",fileroot])
+		page = Enum.join(["- page: ", newp, " - MODULE ",fileroot])
 
 		# make the URL
 		filename = Enum.join([fileroot, ".html"])

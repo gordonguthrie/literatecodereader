@@ -1,45 +1,29 @@
 toc:
   - title: Contents
     subfolderitems:
-      - page: lib - module: index
+      - page: lib - MODULE index
         url:  lib/index.html
-      - page: lib/literate_compiler - module: args
+      - page: lib/literate_compiler - MODULE args
         url:  lib/literate_compiler/args.html
-      - page: lib/literate_compiler - module: cli
+      - page: lib/literate_compiler - MODULE cli
         url:  lib/literate_compiler/cli.html
-      - page: lib/literate_compiler - module: extensions
+      - page: lib/literate_compiler - MODULE extensions
         url:  lib/literate_compiler/extensions.html
-      - page: lib/literate_compiler - module: languages
+      - page: lib/literate_compiler - MODULE languages
         url:  lib/literate_compiler/languages.html
-      - page: lib/literate_compiler/languages - module: elixir_lang
-        url:  lib/literate_compiler/languages/elixir_lang.html
-      - page: lib/literate_compiler/languages - module: erlang
-        url:  lib/literate_compiler/languages/erlang.html
-      - page: lib/literate_compiler/languages/bingo - module: rabid
-        url:  lib/literate_compiler/languages/bingo/rabid.html
-      - page: lib/literate_compiler/languages/bingo - module: robid
-        url:  lib/literate_compiler/languages/bingo/robid.html
-      - page: lib/literate_compiler/languages/bongo - module: robid
-        url:  lib/literate_compiler/languages/bongo/robid.html
-      - page: lib/literate_compiler/languages/bongo - module: rubid
-        url:  lib/literate_compiler/languages/bongo/rubid.html
-      - page: lib/literate_compiler - module: outputter
+      - page: lib/literate_compiler - MODULE outputter
         url:  lib/literate_compiler/outputter.html
-      - page: lib/literate_compiler/outputter - module: html
-        url:  lib/literate_compiler/outputter/html.html
-      - page: lib/literate_compiler/outputter - module: markdown
-        url:  lib/literate_compiler/outputter/markdown.html
-      - page: lib/literate_compiler/outputter/ripbble - module: wahwah
-        url:  lib/literate_compiler/outputter/ripbble/wahwah.html
-      - page: lib/literate_compiler/outputter/ripbble - module: wehweh
-        url:  lib/literate_compiler/outputter/ripbble/wehweh.html
-      - page: lib/literate_compiler/outputter/snoogl - module: aaa
-        url:  lib/literate_compiler/outputter/snoogl/aaa.html
-      - page: lib/literate_compiler/outputter/snoogl - module: zzz
-        url:  lib/literate_compiler/outputter/snoogl/zzz.html
-      - page: lib/literate_compiler - module: process_files
+      - page: lib/literate_compiler - MODULE process_files
         url:  lib/literate_compiler/process_files.html
-      - page: lib/literate_compiler - module: toc
+      - page: lib/literate_compiler - MODULE toc
         url:  lib/literate_compiler/toc.html
-      - page: lib/literate_compiler - module: tree
+      - page: lib/literate_compiler - MODULE tree
         url:  lib/literate_compiler/tree.html
+      - page: lib/literate_compiler/languages - MODULE elixir_lang
+        url:  lib/literate_compiler/languages/elixir_lang.html
+      - page: lib/literate_compiler/languages - MODULE erlang
+        url:  lib/literate_compiler/languages/erlang.html
+      - page: lib/literate_compiler/outputter - MODULE html
+        url:  lib/literate_compiler/outputter/html.html
+      - page: lib/literate_compiler/outputter - MODULE markdown
+        url:  lib/literate_compiler/outputter/markdown.html
