@@ -52,7 +52,7 @@ defmodule LiterateCompiler.TOC do
 		# do some setup
 		rev = Enum.reverse(path)
 		[file | rest] = rev
-		newp = Enum.join(Enum.reverse(rest), "/")
+		newp = Enum.join(["./"] ++ Enum.reverse(rest), "/")
 		fileroot = Path.rootname(file)
 
 		# make the page

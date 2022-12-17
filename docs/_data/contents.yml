@@ -1,29 +1,29 @@
 toc:
   - title: Contents
     subfolderitems:
-      - page: lib - MODULE index
+      - page: .//lib - MODULE index
         url:  /index.html
-      - page: lib/literate_compiler - MODULE args
+      - page: .//lib/literate_compiler - MODULE args
         url:  /literate_compiler/args.html
-      - page: lib/literate_compiler - MODULE cli
+      - page: .//lib/literate_compiler - MODULE cli
         url:  /literate_compiler/cli.html
-      - page: lib/literate_compiler - MODULE extensions
+      - page: .//lib/literate_compiler - MODULE extensions
         url:  /literate_compiler/extensions.html
-      - page: lib/literate_compiler - MODULE languages
+      - page: .//lib/literate_compiler - MODULE languages
         url:  /literate_compiler/languages.html
-      - page: lib/literate_compiler - MODULE outputter
+      - page: .//lib/literate_compiler - MODULE outputter
         url:  /literate_compiler/outputter.html
-      - page: lib/literate_compiler - MODULE process_files
+      - page: .//lib/literate_compiler - MODULE process_files
         url:  /literate_compiler/process_files.html
-      - page: lib/literate_compiler - MODULE toc
+      - page: .//lib/literate_compiler - MODULE toc
         url:  /literate_compiler/toc.html
-      - page: lib/literate_compiler - MODULE tree
+      - page: .//lib/literate_compiler - MODULE tree
         url:  /literate_compiler/tree.html
-      - page: lib/literate_compiler/languages - MODULE elixir_lang
+      - page: .//lib/literate_compiler/languages - MODULE elixir_lang
         url:  /literate_compiler/languages/elixir_lang.html
-      - page: lib/literate_compiler/languages - MODULE erlang
+      - page: .//lib/literate_compiler/languages - MODULE erlang
         url:  /literate_compiler/languages/erlang.html
-      - page: lib/literate_compiler/outputter - MODULE html
+      - page: .//lib/literate_compiler/outputter - MODULE html
         url:  /literate_compiler/outputter/html.html
-      - page: lib/literate_compiler/outputter - MODULE markdown
+      - page: .//lib/literate_compiler/outputter - MODULE markdown
         url:  /literate_compiler/outputter/markdown.html
