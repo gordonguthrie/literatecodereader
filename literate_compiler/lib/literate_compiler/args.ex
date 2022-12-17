@@ -4,6 +4,7 @@ defmodule LiterateCompiler.Args do
       outputdir:   :nil,
       print_files: false,
       help:        false,
+      make_jekyll: false,
       format:      "markdown",
       print_type:  0,
       errors:      []
@@ -31,6 +32,10 @@ defmodule LiterateCompiler.Args do
       "",
       "-i --inputdir   the root directory of the code",
       "                defaults to the current directory",
+      "",
+      "-j --jekyll     generates the contents metadata for jekyll",
+      "                (Jekyll is the site generator for Github Pages)",
+      "                (optional - defaults to off)",
       "",
       "-l --list       doesn't process the files, just prints them",
       "                (optional)",
@@ -74,6 +79,8 @@ defmodule LiterateCompiler.Args do
    defp parse_args(["--format"   , f  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | format:      f})
    defp parse_args(["-i"         , i  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:    i})
    defp parse_args(["--inputdir" , i  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:    i})
+   defp parse_args(["-j"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | make_jekyll: true})
+   defp parse_args(["--jekyll"        | t], args), do: parse_args(t, %LiterateCompiler.Args{args | make_jekyll: true})
    defp parse_args(["-l"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | print_files: true})
    defp parse_args(["--list"          | t], args), do: parse_args(t, %LiterateCompiler.Args{args | print_files: true})
    defp parse_args(["-o"         , o  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | outputdir:   o})
