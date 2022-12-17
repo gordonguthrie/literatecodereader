@@ -51,7 +51,7 @@ defmodule LiterateCompiler.TOC do
 		# do some setup
 		rev = Enum.reverse(path)
 		[file | rest] = rev
-		newp = Enum.join(["./"] ++ Enum.reverse(rest), "/")
+		newp = Enum.join(Enum.reverse(rest), "/")
 		fileroot = Path.rootname(file)
 
 		# make the page
@@ -59,10 +59,11 @@ defmodule LiterateCompiler.TOC do
 
 		# make the URL
 		path = Enum.reverse(rest)
+		[_ | relpath] = path
 		root = Path.rootname(file)
 		file = Enum.join([root, ".", "html"])
-		url = Enum.join(path ++ [file], "/")
-		urlline = Enum.join(["url:  ", url], "/")
+		url  = Path.join(["."] ++ relpath ++ [file])
+		urlline = Enum.join(["url:  ", url])
 
 		# return them
 		{page, urlline}
