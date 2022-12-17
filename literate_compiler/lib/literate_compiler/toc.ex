@@ -62,7 +62,7 @@ defmodule LiterateCompiler.TOC do
 		[_ | relpath] = path
 		root = Path.rootname(file)
 		file = Enum.join([root, ".", "html"])
-		url  = Path.join(["."] ++ relpath ++ [file])
+		url  = Path.join([".", "literatecodereader"] ++ relpath ++ [file])
 		urlline = Enum.join(["url:  ", url])
 
 		# return them
