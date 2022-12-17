@@ -110,8 +110,8 @@ defmodule LiterateCompiler.ProcessFiles do
 
 	defp make_tag(_,     <<"">>, _langmodule), do: []
 	defp make_tag(:none, _lines, _langmodule), do: []
-	defp make_tag(:code,  lines,  langmodule) do
-		level = Kernel.apply(langmodule, :comment_level, [:code])
+	defp make_tag({:code, _} = c,  lines,  langmodule) do
+		level = Kernel.apply(langmodule, :comment_level, [c])
 	 	{:code, level, lines}
 	end
 	defp make_tag(type, lines, langmodule) do

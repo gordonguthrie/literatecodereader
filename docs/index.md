@@ -9,14 +9,16 @@ This is a multiline module comment
 This is a multiline document comment
          In this Elixir formatter document comments are a level 2 comment
 
-
+```elixir
+```
 
 The first two `##` are stripped off and the rest of the text
 is turned into markdown.
 
 Note that single `#` comments (in Elixir) are not processed
-
+```elixir
 # (This comment won't be turned into markdown or html)
+```
 
 ## Second Heading
 ### Third Heading
@@ -35,13 +37,14 @@ numbered lists
 
 and also **bold** and *italic* etc
 and any code in the file will be wrapped in a `pre` tag
-
+```elixir
 def parse_args(args) do
     acc = %LiterateCompiler.Args{}
     parse_args(args, acc)
 end
 
 # Contents
+```
 
  <div>
  {% for item in site.data.contents.toc %}

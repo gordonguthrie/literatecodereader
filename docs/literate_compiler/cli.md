@@ -1,4 +1,4 @@
-defmodule LiterateCompiler.CLI do
+```elixirdefmodule LiterateCompiler.CLI do
 
   alias LiterateCompiler.Args
   alias LiterateCompiler.Outputter
@@ -29,3 +29,4 @@ defmodule LiterateCompiler.CLI do
   end
 
 end
+```

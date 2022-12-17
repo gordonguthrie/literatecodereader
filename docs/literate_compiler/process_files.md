@@ -1,19 +1,21 @@
-defmodule LiterateCompiler.ProcessFiles do
+```elixirdefmodule LiterateCompiler.ProcessFiles do
+```
 
 
 	This is the ProcessFiles module for the Literate Compiler
 
-
+```elixir
 	@empty_accumulator []
 
 	alias LiterateCompiler.Extensions
+```
 
 
 	`list_file` is a function that just prints all the files that
 	will be processed. It checks the file extension and if that sort of
 	file is processed it will be printed - if not it won't.
 
-	def list_file(file) do
+```elixir	def list_file(file) do
 	  ext = Path.extname(file)
 	  langmodule = Extensions.get_lang_module(ext)
 	  case langmodule do
@@ -21,12 +23,13 @@ defmodule LiterateCompiler.ProcessFiles do
 	  	_     -> IO.inspect(file)
 	  end
 	end
+```
 
 
 	`process_file` is a function that just actually process all the source code files and
 	generates the outcome that is specified in the command line options.
 
-	def process_file(file) do
+```elixir	def process_file(file) do
 	 	ext = Path.extname(file)
 	 	langmodule = Extensions.get_lang_module(ext)
 	 	process(file, langmodule)
@@ -110,8 +113,8 @@ defmodule LiterateCompiler.ProcessFiles do
 
 	defp make_tag(_,     <<"">>, _langmodule), do: []
 	defp make_tag(:none, _lines, _langmodule), do: []
-	defp make_tag(:code,  lines,  langmodule) do
-		level = Kernel.apply(langmodule, :comment_level, [:code])
+	defp make_tag({:code, _} = c,  lines,  langmodule) do
+		level = Kernel.apply(langmodule, :comment_level, [c])
 	 	{:code, level, lines}
 	end
 	defp make_tag(type, lines, langmodule) do
@@ -119,4 +122,4 @@ defmodule LiterateCompiler.ProcessFiles do
 	 	{:markdown, level, lines}
 	end
 
-end
+end```

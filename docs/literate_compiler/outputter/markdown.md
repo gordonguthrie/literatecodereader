@@ -1,4 +1,4 @@
-defmodule LiterateCompiler.Outputter.Markdown do
+```elixirdefmodule LiterateCompiler.Outputter.Markdown do
 
 	def format(:markdown, contents, _language) do
 		contents
@@ -10,4 +10,4 @@ defmodule LiterateCompiler.Outputter.Markdown do
 
 	def wrap(contents), do: contents
 
-end
+end```
