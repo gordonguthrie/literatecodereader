@@ -1,4 +1,4 @@
-	defmodule LiterateCompiler.TOC do
+defmodule LiterateCompiler.TOC do
 
 	@empty_accumulator []
 
@@ -58,10 +58,11 @@
 		page = Enum.join(["- page: ", newp, " - MODULE ",fileroot])
 
 		# make the URL
-		filename = Enum.join([fileroot, ".html"])
-		urlpath = Enum.reverse([filename | rest])
-		url = Enum.join(urlpath, "/")
-		urlline = Enum.join(["url:  ", url])
+		[_ | relpath] = Enum.reverse(rest)
+		root = Path.rootname(file)
+		file = Enum.join([root, ".", "html"])
+		url = Enum.join(relpath ++ [file], "/")
+		urlline = Enum.join(["url:  ", url], "/")
 
 		# return them
 		{page, urlline}
