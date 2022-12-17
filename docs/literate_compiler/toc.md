@@ -11,62 +11,39 @@
 				  "  - title: Contents",
 				  "toc:"]
 		# we start indenting at 2 because the header has an indent in it
-		file = indent(toc, 1, 2, header)
+		file = indent(toc, header)
 		fileandpath = Path.join([parsedargs.outputdir, "_data/contents.yml"])
 		write_dir = Path.dirname(fileandpath)
 		:ok = File.mkdir_p(write_dir)
 		File.write(fileandpath, Enum.join(file, "\n"))
 	end
 
-	defp indent([], _n, _padn, acc), do: Enum.reverse(acc)
-	defp indent([{ {:url, n}, line} | t], n, padn, acc) do
-		newacc = pad(line, padn + 1)
-		indent(t, n, padn, [newacc | acc])
+	defp indent([], acc), do: Enum.reverse(acc)
+	defp indent([{ {:url, _n}, line} | t], acc) do
+		newacc = pad(line, 4)
+		indent(t, [newacc | acc])
 	end
-	defp indent([{ {:url, n1}, line} | t], n2, padn, acc) do
-		newpad = if n1 < n2 do
-					padn - 1
-				 else
-				 	padn
-				 end
-		newacc = pad(line, newpad)
-		indent(t, n1, newpad, [newacc | acc])
+	defp indent([{:title, line} | t], acc) do
+		newacc = pad(line, 1)
+		indent(t, [newacc | acc])
 	end
-	defp indent([{:title, line} | t], n, padn, acc) do
-		newacc = pad(line, padn + 1)
-		indent(t, n, padn + 1, [newacc | acc])
+	defp indent([{:sub, line} | t], acc) do
+		newacc = pad(line, 2)
+		indent(t, [newacc | acc])
 	end
-	defp indent([{:sub, line} | t], n, padn, acc) do
-		newacc = pad(line, padn)
-		indent(t, n, padn + 1, [newacc | acc])
-	end
-	defp indent([{:page, line} | t], n, padn, acc) do
-		newacc = pad(line, padn)
-		indent(t, n, padn, [newacc | acc])
+	defp indent([{:page, line} | t], acc) do
+		newacc = pad(line, 3)
+		indent(t, [newacc | acc])
 	end
 
-	defp build_tree([{path, file} | []], acc) do
+	defp build_tree([], acc) do
+		Enum.reverse(acc)
+	end
+	defp build_tree([{path, file} | t], acc) do
 		{page, url} = get_components(path ++ [file])
 		len = length(path)
-		newacc = [{ {:url, len}, url}, {:page, page}]
-		Enum.reverse(newacc ++ acc)
-	end
-	defp build_tree([{path1, file1}, {path2, _file2} = h2 | t], acc) do
-		len1 = length(path1)
-		len2 = length(path2)
-		{page, url} = get_components(path1 ++ [file1])
-		case len1 do
-		  ^len2 ->
-		  	newacc = [{ {:url, len1}, url}, {:page, page}]
-		  	build_tree([h2 | t], newacc ++ acc)
-		  _     ->
-		  	title = hd(Enum.reverse(path2))
-		  	tit = Enum.join(["- title: ", title])
-		  	sub = "subfolderitems:"
-		  	newacc = [{:sub, sub},         {:title, tit},
-		  			  { {:url, len1}, url}, {:page, page}]
-		  	build_tree([h2 | t], newacc ++ acc)
-		end
+	  	newacc = [{ {:url, len}, url}, {:page, page}]
+	  	build_tree(t, newacc ++ acc)
 	end
 
 	defp get_components(path) do
@@ -74,11 +51,11 @@
 		# do some setup
 		rev = Enum.reverse(path)
 		[file | rest] = rev
-		newp = Enum.join(Enum.reverse(rest), " - ")
+		newp = Enum.join(Enum.reverse(rest), "/")
 		fileroot = Path.rootname(file)
 
 		# make the page
-		page = Enum.join(["- page: ", newp, " - ",fileroot])
+		page = Enum.join(["- page: ", newp, " - module: ",fileroot])
 
 		# make the URL
 		filename = Enum.join([fileroot, ".html"])

@@ -18,6 +18,12 @@ RUN apt-get install -y net-tools
 RUN apt-get install -y x11-apps
 RUN apt-get install -y tree
 
+# install Jekyll to test documentation
+RUN apt-get install -y ruby-full build-essential zlib1g-dev
+RUN gem install jekyll bundler
+COPY docs/Gemfile /tmp
+RUN bundle install --gemfile /tmp/Gemfile
+
 # Replace 1000 with your user / group id
 RUN export uid=501 gid=20 && \
     mkdir -p /home/developer && \
