@@ -1,5 +1,26 @@
 defmodule LiterateCompiler.Outputter.HTML do
 
+### Purpose
+
+## is the outputter for HTML - if you want to use GitHub pages
+## use the markdown outputter and GitHub will feed that into
+## Jekyll for you
+
+## The fixed API could have been enforced as a [behaviour](https://hexdocs.pm/elixir/1.4.5/behaviours.html)
+## but that's a bit over the top
+
+#### Public API
+
+## This module decorates the code snippets with classes to use with
+## code highlighters
+
+##       _   _       _     ______ _       _     _              _
+##      | \ | |     | |   |  ____(_)     (_)   | |            | |
+##      |  \| | ___ | |_  | |__   _ _ __  _ ___| |__   ___  __| |
+##      | . ` |/ _ \| __| |  __| | | '_ \| / __| '_ \ / _ \/ _` |
+##      | |\  | (_) | |_  | |    | | | | | \__ \ | | |  __/ (_| |
+##      |_| \_|\___/ \__| |_|    |_|_| |_|_|___/_| |_|\___|\__,_|
+
 	def format(:markdown, contents, _language) do
 		:markdown.conv_utf8(contents)
 	end
@@ -21,6 +42,17 @@ defmodule LiterateCompiler.Outputter.HTML do
 					"</html>"
 				])
 	end
+
+#### Private Fns
+
+## this is all a bit shonky
+
+##       _   _       _     ______ _       _     _              _
+##      | \ | |     | |   |  ____(_)     (_)   | |            | |
+##      |  \| | ___ | |_  | |__   _ _ __  _ ___| |__   ___  __| |
+##      | . ` |/ _ \| __| |  __| | | '_ \| / __| '_ \ / _ \/ _` |
+##      | |\  | (_) | |_  | |    | | | | | \__ \ | | |  __/ (_| |
+##      |_| \_|\___/ \__| |_|    |_|_| |_|_|___/_| |_|\___|\__,_|
 
 	defp css() do
 """

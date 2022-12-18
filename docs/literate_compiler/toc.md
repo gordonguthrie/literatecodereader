@@ -1,7 +1,21 @@
 ```elixir
 defmodule LiterateCompiler.TOC do
 
+```
+
+# Purpose
+
+This generates a table of contents in yaml for Jekyll
+
+```elixir
+
 	@empty_accumulator []
+
+```
+
+## Public API
+
+```elixir
 
 	def make_toc(files, parsedargs) do
 		split = split(files, @empty_accumulator)
@@ -18,6 +32,15 @@ defmodule LiterateCompiler.TOC do
 		:ok = File.mkdir_p(write_dir)
 		File.write(fileandpath, Enum.join(file, "\n"))
 	end
+
+```
+
+## Private Fns
+
+yaml is a pain in the arse, white space matters language
+so you have to write an indenter
+
+```elixir
 
 	defp indent([], acc), do: Enum.reverse(acc)
 	defp indent([{ {:url, _n}, line} | t], acc) do
@@ -43,8 +66,8 @@ defmodule LiterateCompiler.TOC do
 	defp build_tree([{path, file} | t], acc) do
 		{page, url} = get_components(path ++ [file])
 		len = length(path)
-	  	newacc = [{ {:url, len}, url}, {:page, page}]
-	  	build_tree(t, newacc ++ acc)
+		newacc = [{ {:url, len}, url}, {:page, page}]
+		build_tree(t, newacc ++ acc)
 	end
 
 	defp get_components(path) do
@@ -84,22 +107,48 @@ defmodule LiterateCompiler.TOC do
 
 ```
 
-if two paths are the same length sort on path
-if two paths are identical sort on file
-if one path is longer
-* check if the short has the longer as a prefix
+The sorter is the hardest bit of code in the whole programme :-)
+
+      ____            _
+     |  _ \          | |
+     | |_) |_ __ ___ | | _____ _ __
+     |  _ <| '__/ _ \| |/ / _ \ '_ \
+     | |_) | | | (_) |   <  __/ | | |
+     |____/|_|  \___/|_|\_\___|_| |_|
 
 ```elixir
+
 	defp sorter({path1, file1}, {path2, file2}) do
 		len1 = length(path1)
 		len2 = length(path2)
 		len1plus = len1 + 1
 		len2plus = len2 + 1
 		cond do
+
+```
+
+same path, sort by filename
+
+```elixir
 			path1 == path2 ->
 				file1 <= file2
+
+```
+
+paths the same length, sort by path
+
+```elixir
 			len1  == len2 ->
 				path1 <= path2
+
+```
+
+path exactly one longer than the other
+check if the <short path plus filename> is the same as the long
+if it is, the short sorts first
+if it isn't sort on path
+
+```elixir
 			len1plus == len2 ->
 				fname = Path.rootname(file1)
 				case path1 ++ fname do
@@ -112,6 +161,14 @@ if one path is longer
 					^path1 -> false
 					_      -> path1 <= path2
 				end
+
+```
+
+otherwise see if the <short plus filename> is a prefix of the long
+if it is sort short first
+if it isn't sort on <short plus filename> vs <long>
+
+```elixir
 			len1  <  len2 ->
 				fname = Path.rootname(file1)
 				case prefix(path1 ++ [fname], path2) do

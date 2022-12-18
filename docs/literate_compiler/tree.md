@@ -1,9 +1,33 @@
 ```elixir
 defmodule LiterateCompiler.Tree do
 
+```
+
+# Purpose
+
+This is a generic tree walking function
+given a root directory it walks over all the sub directories
+
+The first arguement of the public api is the root directory
+and the second is a function of arity 1 which is called when a file is found
+
+```elixir
+
 	@empty_accumulator []
 
+```
+
+## Public API
+
+```elixir
+
   def walk_tree(directorylist, fun), do: walk_tree(directorylist, fun, @empty_accumulator)
+
+```
+
+## Private Fns
+
+```elixir
 
   defp walk_tree([], _fun, acc), do: acc
   defp walk_tree([h | t], fun, acc) do

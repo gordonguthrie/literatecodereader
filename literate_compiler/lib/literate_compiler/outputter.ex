@@ -1,6 +1,13 @@
 defmodule LiterateCompiler.Outputter do
 
+### Purpose
+
+## writes the output for html and markdown, invoking the specific
+## formatting functions from the appropriate submodules
+
 	alias LiterateCompiler.Extensions
+
+#### Public API
 
 	def write_output([], _args), do: :ok
 	def write_output([{oldfilename, body} | t], args) do
@@ -18,6 +25,8 @@ defmodule LiterateCompiler.Outputter do
 		:ok = File.write(write_file, transformed)
 		write_output(t, args)
 	end
+
+#### Private Fns
 
 	defp make_write_file(oldfilename, inputdir, outputdir, ext) do
 		relative = Path.relative_to(Path.absname(oldfilename), Path.absname(inputdir))

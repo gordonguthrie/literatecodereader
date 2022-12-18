@@ -1,5 +1,24 @@
 ```elixir
 defmodule LiterateCompiler.Args do
+
+```
+
+# Purpose
+
+A standard Elixir library has collected and marshalled all the arguments.
+This module verifies them and ensures that the set of arguments passed
+are coherent.
+
+# Data Structures
+
+This arguments structure is populated when the CLI is called and
+is then passed around the various arguments
+
+When the inputs are validated, any errors are written to the `errors` key
+The consumer of this argument struct checks if it is error free
+
+```elixir
+
    defstruct [
       inputdir:    :nil,
       outputdir:   :nil,
@@ -10,6 +29,14 @@ defmodule LiterateCompiler.Args do
       print_type:  0,
       errors:      []
    ]
+
+```
+
+## Public API
+
+Three simple self-explanatory functions.
+
+```elixir
 
    def parse_args(args) do
       acc = %LiterateCompiler.Args{}
@@ -73,6 +100,15 @@ defmodule LiterateCompiler.Args do
     IO.puts("")
    end
 
+```
+
+## Private Functions
+
+`parse_args` places the inputs into the data structure
+when the arguments have been consumed it calles `validate` on the data structure
+
+```elixir
+
    defp parse_args([],                     args), do: validate(args)
    defp parse_args(["-h"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
    defp parse_args(["--help"          | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
@@ -96,6 +132,15 @@ defmodule LiterateCompiler.Args do
       newerrors = args.errors ++ [error]
       parse_args(t, %LiterateCompiler.Args{args | errors: newerrors})
    end
+
+```
+
+The validate pipeline places all and any errors on the `errors` key
+The reason for this is to avoid the irritating **fix and run again** problem
+If the user makes multiple mistakes in their invocation they should be told
+all of them and not just the first
+
+```elixir
 
    defp validate(args) do
       args

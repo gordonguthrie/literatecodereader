@@ -3,25 +3,30 @@ defmodule LiterateCompiler.ProcessFiles do
 
 ```
 
+# Purpose
 
-	This is the ProcessFiles module for the Literate Compiler
+this module provides functions to be passed into the tree walker
+to process the files it finds
 
+It does three things:
+
+* simply list the files
+* convert them into either html or markdown
+* prepare the input for the creation of a Jekyll table of contents
+^
 
 ```elixir
 
 	@empty_accumulator []
 
-	alias LiterateCompiler.Extensions
-
 ```
 
-
-	`list_file` is a function that just prints all the files that
-	will be processed. It checks the file extension and if that sort of
-	file is processed it will be printed - if not it won't.
-
+# Public API
 
 ```elixir
+
+	alias LiterateCompiler.Extensions
+
 	def list_file(file) do
 	  ext = Path.extname(file)
 	  langmodule = Extensions.get_lang_module(ext)
@@ -31,25 +36,19 @@ defmodule LiterateCompiler.ProcessFiles do
 	  end
 	end
 
-```
-
-
-	`make_contents` is a function that generates the table of contents for jekyll.
-
-
-```elixir
 	def make_jekyll_contents(file) do
 		String.split(file, "/")
 	end
 
 ```
 
-
-	`process_file` is a function that just actually process all the source code files and
-	generates the outcome that is specified in the command line options.
-
+This function identifies a particular file type using
+the `Extensions` module and then uses the Module Name
+returned by `Extensions` to invoke the corrent language
+processor on the contents
 
 ```elixir
+
 	def process_file(file) do
 	 	ext = Path.extname(file)
 	 	langmodule = Extensions.get_lang_module(ext)
@@ -63,6 +62,20 @@ defmodule LiterateCompiler.ProcessFiles do
 		f = process_lines(lines, langmodule, :none, @empty_accumulator, @empty_accumulator)
 		{file, List.flatten(f)}
 	end
+
+```
+
+the way comments are written various from language to language
+
+* in some languages every comment line starts with the same character
+* some languages have start and end delimiters for comments
+^
+
+This handles both types by gobbling multiline comments
+(if the language processor tells it to)
+(See the module LiterateCompiler.Languages.Elixir_lang for an example)
+
+```elixir
 
 	defp process_lines([], _, _type, [], acc) do
 		Enum.reverse(acc)

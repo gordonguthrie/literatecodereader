@@ -1,6 +1,15 @@
 ```elixir
 defmodule LiterateCompiler.Extensions do
 
+```
+
+# Purpose
+
+This module turns file system extension into module names for use
+in both the file processing and output parts of the script.
+
+```elixir
+
 	def get_lang_module(".ex"),                  do: LiterateCompiler.Languages.Elixir_lang
 	def get_lang_module(".exs"),                 do: LiterateCompiler.Languages.Elixir_lang
 	def get_lang_module(".elixir_architecture"), do: LiterateCompiler.Languages.Elixir_lang
