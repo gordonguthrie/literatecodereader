@@ -88,6 +88,7 @@ if two paths are the same length sort on path
 if two paths are identical sort on file
 if one path is longer
 * check if the short has the longer as a prefix
+
 ```elixir
 	defp sorter({path1, file1}, {path2, file2}) do
 		len1 = length(path1)

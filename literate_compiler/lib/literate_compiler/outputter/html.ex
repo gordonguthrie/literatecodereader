@@ -4,6 +4,7 @@ defmodule LiterateCompiler.Outputter.HTML do
 		:markdown.conv_utf8(contents)
 	end
 	def format(:code, contents, language) do
+        IO.inspect(contents, label: "contents")
 		js_extension = Kernel.apply(language, :get_js_ext, [])
 		Enum.join(["<pre class=\"", js_extension, "\"><code>\n", contents, "</code></pre>\n"])
 	end

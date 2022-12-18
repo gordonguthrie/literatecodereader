@@ -1,0 +1,97 @@
+### Architecture Of The Literate Code Reader Escript
+
+#### Introduction
+
+## This script is designed to simply apply presentation layer polish (eg typography,
+## layout, whitespace etc) to the presentation of code comments in a way that makes
+## architectural description of software codebases easier to read and comprehend.
+
+#### The Problem
+
+## Traditional documentation systems focus on documenting software as a library or
+## subsystem - as a black box to be reused where the implementation is abstracted away -
+## and by and large they are excellent at it.
+
+## But architectural readings are a different beast. If API/interface documentation
+## as a set of descriptions of jigsaw pieces with their particular indents and
+## protrusions explored and described then this approach seeks to provide the
+## picture on the jigsaw box cover.
+
+#### The Constraints
+
+## The following constraints inform the design:
+
+## * this is a multi-language project - it must be uncoupled from a particular languages tooling - hence the choice of a self-executing escript
+## * the architecture documentation must play nicely with API/interface documentation
+## * the documentation must be in-synch (and hence in-repo) with the code
+## * most of the code that this could be useful for is on GitHub, so this script needs to play nicely with [GitHub Pages](https://pages.github.com/) which use [Jekyll](https://jekyllrb.com/)
+
+#### Process flow
+
+## The process flow is show below. The script is run with a series of options:
+
+## * where to find the inputs
+## * where to put the outputs
+## * what outputs to create
+## ^
+
+##            Inputs                                                                                          Outputs
+##                                                                                                      ╔══════════════════╗
+##                                                                                                      ║                  ║
+##                                                                                                      ║     List of      ║
+##                                             ┌───────────────────────────────────────────────────────▶║      files       ║
+##                                             │                                                        ║                  ║
+##                                             │                                                        ╚══════════════════╝
+##                                             │
+##     ┌──────────────────┐                    │                                                        ╔══════════════════╗
+##     │                  │                    │                                                        ║                  ║
+##     │      Elixir      │───┐                │                                                        ║       html       ║
+##     │      Files       │   │                │                                                  ┌────▶║      output      ║
+##     │                  │   │                │                                                  │     ║                  ║
+##     └──────────────────┘   │                │                                                  │     ╚══════════════════╝
+##                            │                │                                                  │
+##     ┌──────────────────┐   │   ┏━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┏━━━━━━━━━━━━━━━━━━━━━━━━━┓     │     ╔══════════════════╗
+##     │                  │   │   ┃                         ┃     ┃                         ┃     │     ║                  ║
+##     │      Erlang      │   │   ┃Tranverse directories and┃     ┃Transform into <comments>┃     │     ║     markdown     ║
+##     │      Files       │───┼──▶┃     read the files      ┃────▶┃       and <code>        ┃─────┼────▶║      output      ║
+##     │                  │   │   ┃                         ┃     ┃                         ┃     │     ║                  ║
+##     └──────────────────┘   │   ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛     │     ╚══════════════════╝
+##                            │                                                                   │
+##     ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─    │                                                                   │     ╔══════════════════╗
+##                        │   │                                                                   │     ║                  ║
+##     │      Other           │                                                                   │     ║      Jekyll      ║
+##          Languages     │───┘                                                                   └────▶║    Extensions    ║
+##     │                                                                                                ║                  ║
+##      ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                             ╚══════════════════╝
+
+## The same technique is used to make the inputs and outputs extensible and you can see it in operation wherever you see code like:
+
+level = Kernel.apply(langmodule, :comment_level, [c])
+
+## When the files are read the filetype is extracted and a module called `extensions` is called:
+
+def get_lang_module(".ex"),                  do: LiterateCompiler.Languages.Elixir_lang
+def get_lang_module(".exs"),                 do: LiterateCompiler.Languages.Elixir_lang
+def get_lang_module(".elixir_architecture"), do: LiterateCompiler.Languages.Elixir_lang
+def get_lang_module(".erl"),                 do: LiterateCompiler.Languages.Erlang
+
+## This function returns the name of the module that we use in `Kernel.apply`.
+## Notice that as well as the expected `.ex` and `.exs` we have a new filetype called `.elixir_architecture`.
+## This file type enables us to write documents like this that contain code snippets which are invisible to
+## the Elixir compilation tools.
+
+## To extend this script to add other languages it is a simple matter of adding extra lines here and
+## writing a new module under in the `LiterateCompiler.Languages` namespace.
+
+#### Contents
+
+#jekyll <div>
+#jekyll {% for item in site.data.contents.toc %}
+#jekyll     <h3>{{ item.title }}</h3>
+#jekyll       <ul>
+#jekyll         {% for entry in item.subfolderitems %}
+#jekyll           <li><a href="{{ entry.url }}">{{ entry.page }}</a></li>
+#jekyll         {% endfor %}
+#jekyll       </ul>
+#jekyll   {% endfor %}
+#jekyll </div>

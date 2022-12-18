@@ -1,56 +1,98 @@
-# This escript generates markdown - this is a heading
-It supports the native comment structure of whatever the programming language is
-These include `@moduledoc` and `@doc`
-this is a module comment - level 1 in this formatter
-this is a document comment - level 2 in this formatter
-This is a multiline module comment
-         In this Elixir formatter module comments am a level 1 comment
+# Architecture Of The Literate Code Reader Escript
 
-This is a multiline document comment
-         In this Elixir formatter document comments are a level 2 comment
+## Introduction
+
+This script is designed to simply apply presentation layer polish (eg typography,
+layout, whitespace etc) to the presentation of code comments in a way that makes
+architectural description of software codebases easier to read and comprehend.
+
+## The Problem
+
+Traditional documentation systems focus on documenting software as a library or
+subsystem - as a black box to be reused where the implementation is abstracted away -
+and by and large they are excellent at it.
+
+But architectural readings are a different beast. If API/interface documentation
+as a set of descriptions of jigsaw pieces with their particular indents and
+protrusions explored and described then this approach seeks to provide the
+picture on the jigsaw box cover.
+
+## The Constraints
+
+The following constraints inform the design:
+
+* this is a multi-language project - it must be uncoupled from a particular languages tooling - hence the choice of a self-executing escript
+* the architecture documentation must play nicely with API/interface documentation
+* the documentation must be in-synch (and hence in-repo) with the code
+* most of the code that this could be useful for is on GitHub, so this script needs to play nicely with [GitHub Pages](https://pages.github.com/) which use [Jekyll](https://jekyllrb.com/)
+
+## Process flow
+
+The process flow is show below. The script is run with a series of options:
+
+* where to find the inputs
+* where to put the outputs
+* what outputs to create
+^
+
+           Inputs                                                                                          Outputs
+                                                                                                     ╔══════════════════╗
+                                                                                                     ║                  ║
+                                                                                                     ║     List of      ║
+                                            ┌───────────────────────────────────────────────────────▶║      files       ║
+                                            │                                                        ║                  ║
+                                            │                                                        ╚══════════════════╝
+                                            │
+    ┌──────────────────┐                    │                                                        ╔══════════════════╗
+    │                  │                    │                                                        ║                  ║
+    │      Elixir      │───┐                │                                                        ║       html       ║
+    │      Files       │   │                │                                                  ┌────▶║      output      ║
+    │                  │   │                │                                                  │     ║                  ║
+    └──────────────────┘   │                │                                                  │     ╚══════════════════╝
+                           │                │                                                  │
+    ┌──────────────────┐   │   ┏━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┏━━━━━━━━━━━━━━━━━━━━━━━━━┓     │     ╔══════════════════╗
+    │                  │   │   ┃                         ┃     ┃                         ┃     │     ║                  ║
+    │      Erlang      │   │   ┃Tranverse directories and┃     ┃Transform into <comments>┃     │     ║     markdown     ║
+    │      Files       │───┼──▶┃     read the files      ┃────▶┃       and <code>        ┃─────┼────▶║      output      ║
+    │                  │   │   ┃                         ┃     ┃                         ┃     │     ║                  ║
+    └──────────────────┘   │   ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛     │     ╚══════════════════╝
+                           │                                                                   │
+    ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─    │                                                                   │     ╔══════════════════╗
+                       │   │                                                                   │     ║                  ║
+    │      Other           │                                                                   │     ║      Jekyll      ║
+         Languages     │───┘                                                                   └────▶║    Extensions    ║
+    │                                                                                                ║                  ║
+     ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                             ╚══════════════════╝
+
+The same technique is used to make the inputs and outputs extensible and you can see it in operation wherever you see code like:
 
 ```elixir
 
+level = Kernel.apply(langmodule, :comment_level, [c])
 
 ```
 
-The first two `##` are stripped off and the rest of the text
-is turned into markdown.
+When the files are read the filetype is extracted and a module called `extensions` is called:
 
-Note that single `#` comments (in Elixir) are not processed
 ```elixir
 
-# (This comment won't be turned into markdown or html)
+def get_lang_module(".ex"),                  do: LiterateCompiler.Languages.Elixir_lang
+def get_lang_module(".exs"),                 do: LiterateCompiler.Languages.Elixir_lang
+def get_lang_module(".elixir_architecture"), do: LiterateCompiler.Languages.Elixir_lang
+def get_lang_module(".erl"),                 do: LiterateCompiler.Languages.Erlang
 
 ```
 
-## Second Heading
-### Third Heading
-#### Fourth Heading
-##### Fifth Heading
-###### Sixth Heading
-All other markdown constructs are supported.
+This function returns the name of the module that we use in `Kernel.apply`.
+Notice that as well as the expected `.ex` and `.exs` we have a new filetype called `.elixir_architecture`.
+This file type enables us to write documents like this that contain code snippets which are invisible to
+the Elixir compilation tools.
 
-lists
-* item 1
-* item 2
-
-numbered lists
-1. item 1
-2. item
-
-and also **bold** and *italic* etc
-and any code in the file will be wrapped in a `pre` tag
-```elixir
-
-def parse_args(args) do
-    acc = %LiterateCompiler.Args{}
-    parse_args(args, acc)
-end
-
-```
+To extend this script to add other languages it is a simple matter of adding extra lines here and
+writing a new module under in the `LiterateCompiler.Languages` namespace.
 
 ## Contents
+
  <div>
  {% for item in site.data.contents.toc %}
      <h3>{{ item.title }}</h3>

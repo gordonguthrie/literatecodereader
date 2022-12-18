@@ -6,6 +6,7 @@ defmodule LiterateCompiler.ProcessFiles do
 
 	This is the ProcessFiles module for the Literate Compiler
 
+
 ```elixir
 
 	@empty_accumulator []
@@ -18,6 +19,7 @@ defmodule LiterateCompiler.ProcessFiles do
 	`list_file` is a function that just prints all the files that
 	will be processed. It checks the file extension and if that sort of
 	file is processed it will be printed - if not it won't.
+
 
 ```elixir
 	def list_file(file) do
@@ -34,6 +36,7 @@ defmodule LiterateCompiler.ProcessFiles do
 
 	`make_contents` is a function that generates the table of contents for jekyll.
 
+
 ```elixir
 	def make_jekyll_contents(file) do
 		String.split(file, "/")
@@ -44,6 +47,7 @@ defmodule LiterateCompiler.ProcessFiles do
 
 	`process_file` is a function that just actually process all the source code files and
 	generates the outcome that is specified in the command line options.
+
 
 ```elixir
 	def process_file(file) do
