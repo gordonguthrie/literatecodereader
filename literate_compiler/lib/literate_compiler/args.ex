@@ -165,7 +165,8 @@ defmodule LiterateCompiler.Args do
    end
    defp validate_paths(args), do: args
 
-   defp validate_print_type(%{print_type:  p} = args) do
+   defp validate_print_type(%{print_type: n} = args) when is_integer(n), do: args
+   defp validate_print_type(%{print_type: p} = args) do
       case Integer.parse(p) do
          {n, ""} -> %{args | print_type: n}
          {_, _}  -> %{args | errors: "print level must be an integer #{p}"}
