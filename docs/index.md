@@ -181,6 +181,10 @@ that are genuine libraries could be documented in the normal fashion.
 (Of course the sensible approach would be to break the libraries out into their own repos and
 include them as versioned dependencies, but that often doens't happen).
 
+It would make sense to include `markdown` as an input type too - that way markdown docs could be intermixed
+with code on the file system (yes I did write an architecture page in markdown lolol)
+- obvs the `markdown -> markdown` transformation would be *cough* slight
+
  <div>
  {% for item in site.data.contents.toc %}
      <h3>{{ item.title }}</h3>
