@@ -6,7 +6,7 @@ This script is designed to simply apply presentation layer polish (eg typography
 layout, whitespace etc) to the presentation of code comments in a way that makes
 architectural description of software codebases easier to read and comprehend.
 
-(This page is simply a representation of [this source file](https://github.com/gordonguthrie/literatecodereader/blob/main/literate_compiler/lib/index.elixir_architecture)
+(This page is simply a representation of [this source file](https://github.com/gordonguthrie/literatecodereader/blob/main/literate_compiler/lib/index.elixir_architecture))
 
 ## The Problem
 
