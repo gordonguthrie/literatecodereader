@@ -10,6 +10,9 @@ defmodule LiterateCompiler.Outputter do
 #### Public API
 
 	def write_output([], _args), do: :ok
+	# the tree walker will return a null list if it sees a file
+	# with a type that it isn't processing, so we skip that
+	def write_output([[] | t], args), do: write_output(t, args)
 	def write_output([{oldfilename, body} | t], args) do
 		indir = args.inputdir
 		outdir = args.outputdir
