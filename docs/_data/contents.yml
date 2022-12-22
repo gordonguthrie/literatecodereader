@@ -23,6 +23,10 @@ toc:
         url:  ./literate_compiler/languages/elixir_lang.html
       - page: lib/literate_compiler/languages - MODULE erlang
         url:  ./literate_compiler/languages/erlang.html
+      - page: lib/literate_compiler/languages - MODULE markdown
+        url:  ./literate_compiler/languages/markdown.html
+      - page: lib/literate_compiler/languages - MODULE supercollider
+        url:  ./literate_compiler/languages/supercollider.html
       - page: lib/literate_compiler/outputter - MODULE html
         url:  ./literate_compiler/outputter/html.html
       - page: lib/literate_compiler/outputter - MODULE markdown
