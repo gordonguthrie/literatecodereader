@@ -28,7 +28,7 @@ but that's a bit over the top
 	def comment_level({:fn,      _}), do: 2
 
 
-	def get_js_ext, do: "erlang"
+	def get_css_ext, do: "erlang"
 
 ```
 

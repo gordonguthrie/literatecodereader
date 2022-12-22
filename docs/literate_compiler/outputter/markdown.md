@@ -15,19 +15,34 @@ but that's a bit over the top
 
 ```elixir
 
-	def format(:markdown, contents, _language) do
+	def format({:markdown, level}, print_type, contents, _language) when level <= print_type do
 		Enum.join([contents, "\n"])
 	end
-	def format(:code, contents, language) do
-		trim = String.trim(contents)
-		case trim do
-			"" -> "\n"
-			_  -> js_extension = Kernel.apply(language, :get_js_ext, [])
-				  Enum.join(["```", js_extension, "\n", contents, "\n```\n"])
-		end
+	def format({:markdown, _}, _print_type, contents, _language) do
+		css_extension = ""
+		format_as_code(contents, css_extension)
+	end
+	def format({:code, _}, _print_type, contents, language) do
+		css_extension = Kernel.apply(language, :get_css_ext, [])
+		format_as_code(contents, css_extension)
 	end
 
 	def wrap(contents), do: contents
+
+```
+
+## Private Funs
+
+```elixir
+
+	def format_as_code(contents, ext) do
+		trim = String.trim(contents)
+		case trim do
+			"" -> "\n"
+			_  ->
+				  Enum.join(["```", ext, "\n", contents, "\n```\n"])
+		end
+	end
 
 end
 ```

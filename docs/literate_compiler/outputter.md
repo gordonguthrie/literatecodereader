@@ -52,8 +52,8 @@ formatting functions from the appropriate submodules
 	end
 
 	defp transform(body, print_type, outputter, language)  do
-		lines = for {type, level, contents} <- body, level <= print_type do
-			Kernel.apply(outputter, :format, [type, contents, language])
+		lines = for {type, level, contents} <- body do
+			Kernel.apply(outputter, :format, [{type, level}, print_type, contents, language])
 		end
 		newbody = Enum.join(lines, "\n")
 		Kernel.apply(outputter, :wrap, [newbody])

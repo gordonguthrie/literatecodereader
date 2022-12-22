@@ -21,13 +21,16 @@ defmodule LiterateCompiler.Outputter.HTML do
 ##      | |\  | (_) | |_  | |    | | | | | \__ \ | | |  __/ (_| |
 ##      |_| \_|\___/ \__| |_|    |_|_| |_|_|___/_| |_|\___|\__,_|
 
-	def format(:markdown, contents, _language) do
+	def format({:markdown, level}, print_type, contents, _language)  when level <= print_type  do
 		:markdown.conv_utf8(contents)
 	end
-	def format(:code, contents, language) do
-        IO.inspect(contents, label: "contents")
-		js_extension = Kernel.apply(language, :get_js_ext, [])
-		Enum.join(["<pre class=\"", js_extension, "\"><code>\n", contents, "</code></pre>\n"])
+    def format({:markdown, _}, _print_type, contents, _language) do
+        css_extension = ""
+        format_as_code(contents, css_extension)
+    end
+	def format({:code, _}, _print_level, contents, language) do
+		css_extension = Kernel.apply(language, :get_css_ext, [])
+        format_as_code(contents, css_extension)
 	end
 
 	def wrap(contents) do
@@ -45,6 +48,10 @@ defmodule LiterateCompiler.Outputter.HTML do
 
 #### Private Fns
 
+    def format_as_code(contents, ext) do
+        Enum.join(["<pre class=\"", ext, "\"><code>\n", contents, "</code></pre>\n"])
+    end
+
 ## this is all a bit shonky
 
 ##       _   _       _     ______ _       _     _              _
@@ -53,6 +60,8 @@ defmodule LiterateCompiler.Outputter.HTML do
 ##      | . ` |/ _ \| __| |  __| | | '_ \| / __| '_ \ / _ \/ _` |
 ##      | |\  | (_) | |_  | |    | | | | | \__ \ | | |  __/ (_| |
 ##      |_| \_|\___/ \__| |_|    |_|_| |_|_|___/_| |_|\___|\__,_|
+
+
 
 	defp css() do
 """

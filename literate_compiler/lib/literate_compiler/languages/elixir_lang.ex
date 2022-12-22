@@ -23,7 +23,7 @@ defmodule LiterateCompiler.Languages.Elixir_lang do
 	def comment_level({:module,  _}), do: 1
 	def comment_level({:fn,      _}), do: 2
 
-	def get_js_ext, do: "elixir"
+	def get_css_ext, do: "elixir"
 
 #### Private API
 
