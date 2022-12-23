@@ -28,7 +28,13 @@ defmodule LiterateCompiler.Languages.SuperCollider do
 ## in the private function `is_c` take special notice of the doubled handling of
 ## comments
 
-	defp is_c(<<"/* ",     r::binary>>), do: {{:comment,  :open},  r}
+	defp is_c(<<"/* ",     r::binary>>) do
+		case  Regex.match?(~r/\*\/$/, r) do
+			true  -> newline = Regex.replace(~r/\*\/$/, r, "")
+					 {{:comment,  :line},  newline}
+			false -> {{:comment,  :open},  r}
+		end
+	end
 	defp is_c(<<"/*",      r::binary>>), do: {{:comment,  :open},  r}
 	defp is_c(<<"*/",      r::binary>>), do: {{:comment,  :close}, r}
 	defp is_c(<<"// ",     r::binary>>), do: {{:comment, :line},   r}

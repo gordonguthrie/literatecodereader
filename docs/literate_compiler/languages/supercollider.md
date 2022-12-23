@@ -41,7 +41,13 @@ comments
 
 ```elixir
 
-	defp is_c(<<"/* ",     r::binary>>), do: { {:comment,  :open},  r}
+	defp is_c(<<"/* ",     r::binary>>) do
+		case  Regex.match?(~r/\*\/$/, r) do
+			true  -> newline = Regex.replace(~r/\*\/$/, r, "")
+					 { {:comment,  :line},  newline}
+			false -> { {:comment,  :open},  r}
+		end
+	end
 	defp is_c(<<"/*",      r::binary>>), do: { {:comment,  :open},  r}
 	defp is_c(<<"*/",      r::binary>>), do: { {:comment,  :close}, r}
 	defp is_c(<<"// ",     r::binary>>), do: { {:comment, :line},   r}
