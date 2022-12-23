@@ -48,12 +48,12 @@ comments
 			false -> { {:comment,  :open},  r}
 		end
 	end
-	defp is_c(<<"/*",      r::binary>>), do: { {:comment,  :open},  r}
-	defp is_c(<<"*/",      r::binary>>), do: { {:comment,  :close}, r}
-	defp is_c(<<"// ",     r::binary>>), do: { {:comment, :line},   r}
-	defp is_c(<<"//",      r::binary>>), do: { {:comment, :line},   r}
-	defp is_c(<<"/jekyll", r::binary>>), do: { {:comment, :line},   r}
-	defp is_c(c),                        do: { {:code,    :code},   c}
+	defp is_c(<<"/*",      r::binary>>), do: { {:comment, :open},  r}
+	defp is_c(<<"*/",      r::binary>>), do: { {:comment, :close}, r}
+	defp is_c(<<"// ",     r::binary>>), do: { {:comment, :line},  r}
+	defp is_c(<<"//",      r::binary>>), do: { {:comment, :line},  r}
+	defp is_c(<<"/jekyll", r::binary>>), do: { {:comment, :line},  r}
+	defp is_c(c),                        do: { {:code,    :code},  c}
 
 	defp expand(c) do
 		newc = String.replace(c, "{ {", "{ {", [global: true])
