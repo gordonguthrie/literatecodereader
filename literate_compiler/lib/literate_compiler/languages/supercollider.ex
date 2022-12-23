@@ -13,6 +13,7 @@ defmodule LiterateCompiler.Languages.SuperCollider do
 
 	def is_comment(line) do
 		{newt, newl} = is_c(String.trim(line))
+		# IO.inspect({{newt, newl}, line}, label: "in supercollider")
 		case newt do
 			{:code, :code} -> {newt, expand(line)}
 			_              -> {newt, newl}
@@ -35,8 +36,8 @@ defmodule LiterateCompiler.Languages.SuperCollider do
 			false -> {{:comment,  :open},  r}
 		end
 	end
-	defp is_c(<<"/*",      r::binary>>), do: {{:comment, :open},  r}
-	defp is_c(<<"*/",      r::binary>>), do: {{:comment, :close}, r}
+	defp is_c(<<"/\*",     r::binary>>), do: {{:comment, :open},  r}
+	defp is_c(<<"\*/",     r::binary>>), do: {{:comment, :close}, r}
 	defp is_c(<<"// ",     r::binary>>), do: {{:comment, :line},  r}
 	defp is_c(<<"//",      r::binary>>), do: {{:comment, :line},  r}
 	defp is_c(<<"/jekyll", r::binary>>), do: {{:comment, :line},  r}
