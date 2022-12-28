@@ -1,33 +1,33 @@
 toc:
   - title: Contents
     subfolderitems:
-      - page: lib - MODULE index
+      - page: index.elixir_architecture
         url:  ./index.html
-      - page: lib/literate_compiler - MODULE args
+      - page: literate_compiler: args.ex
         url:  ./literate_compiler/args.html
-      - page: lib/literate_compiler - MODULE cli
+      - page: literate_compiler: cli.ex
         url:  ./literate_compiler/cli.html
-      - page: lib/literate_compiler - MODULE extensions
+      - page: literate_compiler: extensions.ex
         url:  ./literate_compiler/extensions.html
-      - page: lib/literate_compiler - MODULE languages
+      - page: literate_compiler: languages.ex
         url:  ./literate_compiler/languages.html
-      - page: lib/literate_compiler - MODULE outputter
+      - page: literate_compiler: outputter.ex
         url:  ./literate_compiler/outputter.html
-      - page: lib/literate_compiler - MODULE process_files
+      - page: literate_compiler: process_files.ex
         url:  ./literate_compiler/process_files.html
-      - page: lib/literate_compiler - MODULE toc
+      - page: literate_compiler: toc.ex
         url:  ./literate_compiler/toc.html
-      - page: lib/literate_compiler - MODULE tree
+      - page: literate_compiler: tree.ex
         url:  ./literate_compiler/tree.html
-      - page: lib/literate_compiler/languages - MODULE elixir_lang
+      - page: literate_compiler/languages: elixir_lang.ex
         url:  ./literate_compiler/languages/elixir_lang.html
-      - page: lib/literate_compiler/languages - MODULE erlang
+      - page: literate_compiler/languages: erlang.ex
         url:  ./literate_compiler/languages/erlang.html
-      - page: lib/literate_compiler/languages - MODULE markdown
+      - page: literate_compiler/languages: markdown.ex
         url:  ./literate_compiler/languages/markdown.html
-      - page: lib/literate_compiler/languages - MODULE supercollider
+      - page: literate_compiler/languages: supercollider.ex
         url:  ./literate_compiler/languages/supercollider.html
-      - page: lib/literate_compiler/outputter - MODULE html
+      - page: literate_compiler/outputter: html.ex
         url:  ./literate_compiler/outputter/html.html
-      - page: lib/literate_compiler/outputter - MODULE markdown
+      - page: literate_compiler/outputter: markdown.ex
         url:  ./literate_compiler/outputter/markdown.html

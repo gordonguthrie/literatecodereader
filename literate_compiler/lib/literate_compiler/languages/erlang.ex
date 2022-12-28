@@ -30,13 +30,13 @@ defmodule LiterateCompiler.Languages.Erlang do
 ## in the private function `is_c` take special notice of the doubled handling of
 ## comments
 
+	defp is_c(<<"%jekyll", r::binary>>), do: {{:comment, :line},    r}
 	defp is_c(<<"%%%",     r::binary>>), do: {{:module,  :comment}, r}
 	defp is_c(<<"%%% ",    r::binary>>), do: {{:module,  :comment}, r}
 	defp is_c(<<"%% ",     r::binary>>), do: {{:fn,      :comment}, r}
 	defp is_c(<<"%%",      r::binary>>), do: {{:fn,      :comment}, r}
 	defp is_c(<<"% ",      r::binary>>), do: {{:comment, :line},    r}
 	defp is_c(<<"%",       r::binary>>), do: {{:comment, :line},    r}
-	defp is_c(<<"%jekyll", r::binary>>), do: {{:comment, :line},    r}
 	defp is_c(c),                        do: {{:code,    :code},    c}
 
 	defp expand(c) do

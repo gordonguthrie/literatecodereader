@@ -6,19 +6,21 @@ defmodule LiterateCompiler.TOC do
 
 	@empty_accumulator []
 
+	alias LiterateCompiler.Outputter
+
 #### Public API
 
-	def make_toc(files, parsedargs) do
+	def make_toc(files, args) do
 		split = split(files, @empty_accumulator)
 		sorted = Enum.sort(split, &sorter/2)
-		toc = build_tree(sorted, @empty_accumulator)
+		toc = build_tree(sorted, args, @empty_accumulator)
 		# the toc starts with a line 'toc:' and a title and subfolder
 		header = ["    subfolderitems:",
 				  "  - title: Contents",
 				  "toc:"]
 		# we start indenting at 2 because the header has an indent in it
 		file = indent(toc, header)
-		fileandpath = Path.join([parsedargs.outputdir, "_data/contents.yml"])
+		fileandpath = Path.join([args.outputdir, "_data/contents.yml"])
 		write_dir = Path.dirname(fileandpath)
 		:ok = File.mkdir_p(write_dir)
 		File.write(fileandpath, Enum.join(file, "\n"))
@@ -47,34 +49,42 @@ defmodule LiterateCompiler.TOC do
 		indent(t, [newacc | acc])
 	end
 
-	defp build_tree([], acc) do
+	defp build_tree([], _args, acc) do
 		Enum.reverse(acc)
 	end
-	defp build_tree([{path, file} | t], acc) do
-		{page, url} = get_components(path ++ [file])
+	defp build_tree([{path, file} | t], args, acc) do
+		{page, url} = get_components(path ++ [file], args)
 		len = length(path)
 		newacc = [{{:url, len}, url}, {:page, page}]
-		build_tree(t, newacc ++ acc)
+		build_tree(t, args, newacc ++ acc)
 	end
 
-	defp get_components(path) do
+	defp get_components(path, args) do
+
+		oldext = Path.extname(path)
+		oldfile = Path.join(path)
+		newfile = Outputter.make_write_file(oldfile, args.inputdir, args.outputdir, "html")
+		newpath = String.split(newfile, "/")
 
 		# do some setup
-		rev = Enum.reverse(path)
+		rev = Enum.reverse(newpath)
 		[file | rest] = rev
-		newp = Enum.join(Enum.reverse(rest), "/")
 		fileroot = Path.rootname(file)
 
-		# make the page
-		page = Enum.join(["- page: ", newp, " - MODULE ",fileroot])
-
 		# make the URL
-		path = Enum.reverse(rest)
-		[_ | relpath] = path
+		relpath = Enum.reverse(rest)
+		[_, _ | trimmedrelpath] = relpath
 		root = Path.rootname(file)
 		file = Enum.join([root, ".", "html"])
-		url  = Path.join(["."] ++ relpath ++ [file])
+		url  = Path.join(["."] ++ trimmedrelpath ++ [file])
+
+		# make the lines for the toc
 		urlline = Enum.join(["url:  ", url])
+		page = case trimmedrelpath do
+			[] -> Enum.join(["- page: ", fileroot, oldext])
+		    _  -> pagepath = Path.join(trimmedrelpath)
+				Enum.join(["- page: ", pagepath, ": ", fileroot, oldext])
+		end
 
 		# return them
 		{page, urlline}

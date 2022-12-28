@@ -29,14 +29,16 @@ defmodule LiterateCompiler.Outputter do
 		write_output(t, args)
 	end
 
-#### Private Fns
+## the function `make_write_file/4` is also used by the `toc` module
 
-	defp make_write_file(oldfilename, inputdir, outputdir, ext) do
+	def make_write_file(oldfilename, inputdir, outputdir, ext) do
 		relative = Path.relative_to(Path.absname(oldfilename), Path.absname(inputdir))
 		old = Path.join([outputdir, relative])
 		root = Path.rootname(old)
 		Enum.join([root, ".", ext])
 	end
+
+#### Private Fns
 
 	defp transform(body, print_type, outputter, language)  do
 		lines = for {type, level, contents} <- body do
