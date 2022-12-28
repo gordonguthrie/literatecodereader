@@ -3,31 +3,31 @@ toc:
     subfolderitems:
       - page: index.elixir_architecture
         url:  ./index.html
-      - page: literate_compiler: args.ex
+      - page: literate_compiler - args.ex
         url:  ./literate_compiler/args.html
-      - page: literate_compiler: cli.ex
+      - page: literate_compiler - cli.ex
         url:  ./literate_compiler/cli.html
-      - page: literate_compiler: extensions.ex
+      - page: literate_compiler - extensions.ex
         url:  ./literate_compiler/extensions.html
-      - page: literate_compiler: languages.ex
+      - page: literate_compiler - languages.ex
         url:  ./literate_compiler/languages.html
-      - page: literate_compiler: outputter.ex
+      - page: literate_compiler - outputter.ex
         url:  ./literate_compiler/outputter.html
-      - page: literate_compiler: process_files.ex
+      - page: literate_compiler - process_files.ex
         url:  ./literate_compiler/process_files.html
-      - page: literate_compiler: toc.ex
+      - page: literate_compiler - toc.ex
         url:  ./literate_compiler/toc.html
-      - page: literate_compiler: tree.ex
+      - page: literate_compiler - tree.ex
         url:  ./literate_compiler/tree.html
-      - page: literate_compiler/languages: elixir_lang.ex
+      - page: literate_compiler/languages - elixir_lang.ex
         url:  ./literate_compiler/languages/elixir_lang.html
-      - page: literate_compiler/languages: erlang.ex
+      - page: literate_compiler/languages - erlang.ex
         url:  ./literate_compiler/languages/erlang.html
-      - page: literate_compiler/languages: markdown.ex
+      - page: literate_compiler/languages - markdown.ex
         url:  ./literate_compiler/languages/markdown.html
-      - page: literate_compiler/languages: supercollider.ex
+      - page: literate_compiler/languages - supercollider.ex
         url:  ./literate_compiler/languages/supercollider.html
-      - page: literate_compiler/outputter: html.ex
+      - page: literate_compiler/outputter - html.ex
         url:  ./literate_compiler/outputter/html.html
-      - page: literate_compiler/outputter: markdown.ex
+      - page: literate_compiler/outputter - markdown.ex
         url:  ./literate_compiler/outputter/markdown.html

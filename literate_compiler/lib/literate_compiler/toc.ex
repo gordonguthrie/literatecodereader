@@ -83,7 +83,7 @@ defmodule LiterateCompiler.TOC do
 		page = case trimmedrelpath do
 			[] -> Enum.join(["- page: ", fileroot, oldext])
 		    _  -> pagepath = Path.join(trimmedrelpath)
-				Enum.join(["- page: ", pagepath, ": ", fileroot, oldext])
+				Enum.join(["- page: ", pagepath, " - ", fileroot, oldext])
 		end
 
 		# return them
