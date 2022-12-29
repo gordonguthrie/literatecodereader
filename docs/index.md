@@ -2,22 +2,17 @@
 
 ## Introduction
 
-This script is designed to simply apply presentation layer polish (eg typography,
-layout, whitespace etc) to the presentation of code comments in a way that makes
-architectural description of software codebases easier to read and comprehend.
+This script is designed to simply apply presentation layer polish (eg typography, layout, whitespace etc) to the presentation of code comments in a way that makes architectural description of software codebases easier to read and comprehend.
 
 (This page is simply a representation of [this source file](https://github.com/gordonguthrie/literatecodereader/blob/main/literate_compiler/lib/index.elixir_architecture))
 
 ## The Problem
 
-Traditional documentation systems focus on documenting software as a library or
-subsystem - as a black box to be reused where the implementation is abstracted away -
-and by and large they are excellent at it.
+Traditional documentation systems focus on documenting software as a library or subsystem - as a black box to be reused where the implementation is abstracted away - and by and large they are excellent at it.
 
-But architectural readings are a different beast. If API/interface documentation
-as a set of descriptions of jigsaw pieces with their particular indents and
-protrusions explored and described then this approach seeks to provide the
-picture on the jigsaw box cover.
+But architectural readings are a different beast. If API/interface documentation as a set of descriptions of jigsaw pieces with their particular indents and protrusions explored and described then this approach seeks to provide the picture on the jigsaw box cover.
+
+Not all files in the code base are equally useful in understanding an architecture and in building architecture diagrams sometimes you just want to hide some files whose contents are just noise when the reader is trying to understand the shape of the system.
 
 ## The Constraints
 
@@ -27,6 +22,7 @@ The following constraints inform the design:
 * the architecture documentation must play nicely with API/interface documentation
 * the documentation must be in-synch (and hence in-repo) with the code
 * most of the code that this could be useful for is on GitHub, so this script needs to play nicely with [GitHub Pages](https://pages.github.com/) which use [Jekyll](https://jekyllrb.com/)
+^
 
 ## Process flow
 
@@ -40,32 +36,32 @@ The process flow is show below. The script is run with a series of options:
 ^
 
 ```
-       Inputs                                                                                   Outputs
+        Inputs                                                                                   Outputs
 
-┌──────────────────┐                                                                      ╔══════════════════╗
-│                  │─┐                                                                    ║                  ║
-│      Elixir      │ │                                                                    ║     List of      ║
-│      Files       │ │           ┌───────────────────────────────────────────────────────▶║      files       ║
-│                  │ │           │                                                        ║                  ║
-└──────────────────┘ │           │                                                        ╚══════════════════╝
-┌──────────────────┐ │           │                                                        ╔══════════════════╗
-│                  │ │           │                                                        ║                  ║
-│      Erlang      │ │           │                                                        ║       HTML       ║
-│      Files       │─┤ ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓ ┌▶║      output      ║
-│                  │ │ ┃    Tranverse     ┃  ┃                  ┃  ┃  Transform into  ┃ │ ║                  ║
-└──────────────────┘ │ ┃ directories and  ┃  ┃Exclude files from┃  ┃  <comments> and  ┃ │ ╚══════════════════╝
-┌──────────────────┐ ├▶┃  read the files  ┃─▶┃    the build     ┃─▶┃      <code>      ┃─┤ ╔══════════════════╗
-│                  │ │ ┃                  ┃  ┃                  ┃  ┃                  ┃ │ ║                  ║
-│  Supercollider   │ │ ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛ │ ║     Markdown     ║
-│      Files       │─┤                                                                  ├▶║      output      ║
-│                  │ │                                                                  │ ║                  ║
-└──────────────────┘ │                                                                  │ ╚══════════════════╝
-┌ ─ ─ ─ ─ ─ ─ ─ ─ ─  │                                                                  │ ╔══════════════════╗
-                   │ │                                                                  │ ║                  ║
-│      Other         │                                                                  │ ║      Jekyll      ║
-     Languages     │─┘                                                                  └▶║    Extensions    ║
-│                                                                                         ║                  ║
- ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                      ╚══════════════════╝
+ ┌──────────────────┐                                                                      ╔══════════════════╗
+ │                  │─┐                                                                    ║                  ║
+ │      Elixir      │ │                                                                    ║     List of      ║
+ │      Files       │ │           ┌───────────────────────────────────────────────────────▶║      files       ║
+ │                  │ │           │                                                        ║                  ║
+ └──────────────────┘ │           │                                                        ╚══════════════════╝
+ ┌──────────────────┐ │           │                                                        ╔══════════════════╗
+ │                  │ │           │                                                        ║                  ║
+ │      Erlang      │ │           │                                                        ║       HTML       ║
+ │      Files       │─┤ ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓ ┌▶║      output      ║
+ │                  │ │ ┃                  ┃  ┃                  ┃  ┃                  ┃ │ ║                  ║
+ └──────────────────┘ │ ┃    Tranverse     ┃  ┃Exclude files from┃  ┃  Transform into  ┃ │ ╚══════════════════╝
+ ┌──────────────────┐ ├▶┃ directories and  ┃─▶┃the artchitecture ┃─▶┃  <comments> and  ┃─┤ ╔══════════════════╗
+ │                  │ │ ┃  read the files  ┃  ┃ documents build  ┃  ┃      <code>      ┃ │ ║                  ║
+ │  Supercollider   │ │ ┃                  ┃  ┃                  ┃  ┃                  ┃ │ ║     Markdown     ║
+ │      Files       │─┤ ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛ ├▶║      output      ║
+ │                  │ │                                                                  │ ║                  ║
+ └──────────────────┘ │                                                                  │ ╚══════════════════╝
+ ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─  │                                                                  │ ╔══════════════════╗
+                    │ │                                                                  │ ║                  ║
+ │      Other         │                                                                  │ ║      Jekyll      ║
+      Languages     │─┘                                                                  └▶║    Extensions    ║
+ │                                                                                         ║                  ║
+  ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                      ╚══════════════════╝
 ```
 
 The same technique is used to make the inputs and outputs extensible and you can see it in operation wherever you see code like:
@@ -104,14 +100,11 @@ On the way out, the same applies. We specify an output format in the command lin
 
 This is an [escript](https://hexdocs.pm/mix/main/Mix.Tasks.Escript.Build.html) running as a command line.
 
-An escript is just a standard Elixir application bundled with the runtime in a self-extracting format
-When run it invokes a function called `main/1` with the command line arguments as a list.
+An escript is just a standard Elixir application bundled with the runtime in a self-extracting format. When run it invokes a function called `main/1` with the command line arguments as a list.
 
-The function that is called is specified in the `mix.exs` file. A module is nominated as the entry point
-and that module is expected to expose the function `main/1`.
+The function that is called is specified in the `mix.exs` file. A module is nominated as the entry point and that module is expected to expose the function `main/1`.
 
-In this escript the [cli.ex](./literate_compiler/cli.html) is used.
-It uses the standard Elixir `Args` to process the arguments
+In this escript the [cli.ex](./literate_compiler/cli.html) is used. It uses the standard Elixir `Args` to process the arguments
 
 ### Args
 
@@ -129,45 +122,34 @@ up a tree
         ├── cli.ex
         ├── extensions.ex
         ├── languages
-        │   ├── elixir_lang.ex
-        │   └── erlang.ex
+        │             ├── elixir_lang.ex
+        │             └── erlang.ex
         ├── languages.ex
         ├── outputter
-        │   ├── html.ex
-        │   └── markdown.ex
+        │             ├── html.ex
+        │             └── markdown.ex
         ├── outputter.ex
         ├── process_files.ex
         ├── toc.ex
         └── tree.ex
 
-The module [tree.ex](./literate_compiler/tree.html) provides the functionality to walk the tree.
-We pass in functions from the module [process_files.ex](./literate_compiler/process_files.html) to
-actually do the work.
+The module [tree.ex](./literate_compiler/tree.html) provides the functionality to walk the tree. We pass in functions from the module [process_files.ex](./literate_compiler/process_files.html) to actually do the work.
 
 ## Outputs
 
 Some outputs (like list files) are self-contained, the function prints out the files it finds as it goes.
 
-Other require outputs to be created. Once the `cli` module has invoked the tree walker it gets back the appropriate
-output from the walk and it then uses that to generate the outputs
+Other require outputs to be created. Once the `cli` module has invoked the tree walker it gets back the appropriate output from the walk and it then uses that to generate the outputs
 
-The module [`Outputter`](./literate_compiler/outputter.html) does most of the work and uses the `Kernel.apply` trick
-to pick up the outputters for `markdown` or `html` as appropriate.
+The module [`Outputter`](./literate_compiler/outputter.html) does most of the work and uses the `Kernel.apply` trick to pick up the outputters for `markdown` or `html` as appropriate.
 
 To be a good citizen the escript can emit a Jekyll table of contents using [`toc.ex`](./literate_compiler/toc.html).
 
-Examination of either the source code of this page, or [elixir_lang.ex](./literate_compiler/languages/elixir_lang.html)
-shows that a special markup is used for Jekyll
+Examination of either the source code of this page, or [elixir_lang.ex](./literate_compiler/languages/elixir_lang.html) shows that a special markup is used for Jekyll
 
-There is a problem in that `Jekyll` thinks two curly braces without a space (so like '{ {' but without the space, obvs)
-is for it and Elixir has a lot of them so a special processing route has to be found.
+There is a problem in that `Jekyll` thinks two curly braces without a space (so like '{ {' but without the space, obvs) is for it and Elixir has a lot of them so a special processing route has to be found.
 
-Because of the clash in needs between **document me as a library** and **show me the architecture** it is possible
-for this script to skip some comments **if the language processor supports it**.
-See [elixir_lang.ex](./literate_compiler/languages/elixir_lang.html) for details.
-Elixir attaches documentation to the AST during parsing using `@moduledoc` and `@doc` attributes.
-(See [Writing Elixir Documentation](https://hexdocs.pm/elixir/writing-documentation.html) for details)
-With levels we can filter our API focussed documentation (Ex_docs will ignore our inline documentation too)
+Because of the clash in needs between **document me as a library** and **show me the architecture** it is possible for this script to skip some comments **if the language processor supports it**. See [elixir_lang.ex](./literate_compiler/languages/elixir_lang.html) for details.Elixir attaches documentation to the AST during parsing using `@moduledoc` and `@doc` attributes. (See [Writing Elixir Documentation](https://hexdocs.pm/elixir/writing-documentation.html) for details). With levels we can filter our API focussed documentation (Ex_docs will ignore our inline documentation too).
 
 Finding a style (and uses of levels) for your project and language will be up to you.
 
