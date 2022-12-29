@@ -17,6 +17,7 @@ defmodule LiterateCompiler.Args do
    defstruct [
       inputdir:    :nil,
       outputdir:   :nil,
+      excludes:    :nil,
       print_files: false,
       help:        false,
       make_jekyll: false,
@@ -42,35 +43,48 @@ defmodule LiterateCompiler.Args do
       "either directly as HTML or as markdown for github to convert to GitHub pages",
       "",
       "Options:",
-      "-h --help       prints this message",
+      "-h --help       takes no argument",
+      "                prints this message",
       "                (optional)",
-      "-f --format     specify what the script should output [markdown | html]",
+      "",
+      "-e --exclude    takes 1 argument",
+      "                which path to and name of an exclude file",
+      "                which contains a list of modules to exclude",
+      "                one per line, path relative to the directory this script runs in",
+      "                exclude files can be generated with the -l --list option",
+      "                (optional - default .literate_compiler.exclude in the current directory)",
+      "",
+      "-f --format     takes 1 argument, one of: [markdown | html]",
+      "                specify what the script should output",
       "                if you are intending to publish on github pages",
       "                set to markdown",
       "                (optional - default markdown)",
       "",
-      "-i --inputdir   the root directory of the code",
+      "-i --inputdir   takes 1 argument",
+      "                the root directory of the code",
       "                defaults to the current directory",
       "",
-      "-j --jekyll     generates the contents metadata for jekyll",
+      "-j --jekyll     takes no arguments",
+      "                generates the contents metadata for jekyll",
       "                (Jekyll is the site generator for Github Pages)",
       "                (optional - defaults to off)",
       "",
-      "-l --list       doesn't process the files, just prints them",
+      "-l --list       takes no arguments",
+      "                doesn't process the files, just prints them",
       "                (optional)",
       "",
-      "-o --outputdir  the directory to output the html",
+      "-o --outputdir  takes 1 argument",
+      "                the directory to output the html",
       "                defaults to the current directory",
       "",
-      "-t --type       the type of output - usually 0, 1 or 2",
+      "-t --type       takes 1 argument",
+      "                the type of output - usually 0, 1 or 2",
       "                optional - defaults to 0",
       "                0 is all comments shown",
       "                1 is some comments surpressed",
       "                2 is maximum comments supressed",
       "                (but see the documentation of a particular language",
       "                extension for details)",
-      "",
-      "All options (except help) take exactly one argument",
       "",
       "Either the inputdir or the outputdir must be set explicitly",
       "",
@@ -96,9 +110,11 @@ defmodule LiterateCompiler.Args do
 ## `parse_args` places the inputs into the data structure
 ## when the arguments have been consumed it calles `validate` on the data structure
 
-   defp parse_args([],                     args), do: validate(args)
+   defp parse_args([],                      args), do: validate(args)
    defp parse_args(["-h"              | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
    defp parse_args(["--help"          | t], args), do: parse_args(t, %LiterateCompiler.Args{args | help:        true})
+   defp parse_args(["-e"         , e  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | excludes:    e})
+   defp parse_args(["--exclude"  , e  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | excludes:    e})
    defp parse_args(["-f"         , f  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | format:      f})
    defp parse_args(["--format"   , f  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | format:      f})
    defp parse_args(["-i"         , i  | t], args), do: parse_args(t, %LiterateCompiler.Args{args | inputdir:    i})
@@ -131,6 +147,7 @@ defmodule LiterateCompiler.Args do
       |> validate_formats
       |> validate_paths
       |> validate_print_type
+      |> validate_excludes
    end
 
    defp validate_usage(args) do
@@ -143,8 +160,8 @@ defmodule LiterateCompiler.Args do
       end
    end
 
-   defp validate_formats(%{format: "markdown"} = args), do: %{args | format: "md"}
-   defp validate_formats(%{format: "html"} = args), do: args
+   defp validate_formats(%{format: "markdown"}       = args), do: %{args | format: "md"}
+   defp validate_formats(%{format: "html"}           = args), do: args
    defp validate_formats(%{format: other, errors: e} = args) do
       error = "invalid output format, must be html or markdown: #{other}"
       %{args | errors: [error | e]}
@@ -155,11 +172,11 @@ defmodule LiterateCompiler.Args do
       outputDirIsDir = File.dir?(args.outputdir)
       case {inputDirIsDir, outputDirIsDir} do
          {true,  true}  -> args
-         {true,  false} -> newerrors = ["output dir is not a directory" | args.errors]
+         {true,  false} -> newerrors = ["output dir #{args.outputdir} is not a directory" | args.errors]
                            %{args | errors:   newerrors}
-         {false, true}  -> newerrors = ["input dir is not a directory" | args.errors]
+         {false, true}  -> newerrors = ["input dir #{args.inputdir} is not a directory" | args.errors]
                            %{args | errors:   newerrors}
-         {false, false} -> newerrors = ["neither input dir our output dir is a directory" | args.errors]
+         {false, false} -> newerrors = ["neither input dir#{args.inputdir} nor output dir #{args.outputdir} is a directory" | args.errors]
                            %{args | errors:   newerrors}
       end
    end
@@ -169,9 +186,30 @@ defmodule LiterateCompiler.Args do
    defp validate_print_type(%{print_type: p} = args) do
       case Integer.parse(p) do
          {n, ""} -> %{args | print_type: n}
-         {_, _}  -> %{args | errors: "print level must be an integer #{p}"}
-         err     -> %{args | errors: "print level must be an integer #{err}"}
+         {_, _}  -> %{args | errors: "print level must be an integer: #{p}"}
+         err     -> %{args | errors: "print level must be an integer: #{err}"}
       end
+   end
+
+   defp validate_excludes(%{excludes: e} = args) when e == :nil do
+      case File.exists?("./.literate_compiler.exclude") do
+         true  -> excludes = read_excludes("./.literate_compiler.exclude")
+                  %{args | excludes: excludes}
+         false -> %{args | excludes: []}
+      end
+   end
+   defp validate_excludes(%{excludes: e, errors: errs} = args) do
+      case File.exists?(e) do
+         true  -> excludes = read_excludes(e)
+                  %{args | excludes: excludes}
+         false -> newerrs = ["exclude file doesn't exist: #{e}" | errs]
+                  %{args | errors: newerrs}
+      end
+   end
+
+   defp read_excludes(file) do
+      {:ok, contents} = File.read(file)
+      String.split(contents, "\n")
    end
 
 end

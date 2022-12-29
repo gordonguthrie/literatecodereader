@@ -23,18 +23,23 @@ formatting functions from the appropriate submodules
 	# with a type that it isn't processing, so we skip that
 	def write_output([[] | t], args), do: write_output(t, args)
 	def write_output([{oldfilename, body} | t], args) do
-		indir = args.inputdir
-		outdir = args.outputdir
-		newext = args.format
-		oldext = Path.extname(oldfilename)
-		print_type = args.print_type
-		outputter = Extensions.get_formatter_module(newext)
-		language = Extensions.get_lang_module(oldext)
-		transformed = transform(body, print_type, outputter, language)
-		write_file = make_write_file(oldfilename, indir, outdir, newext)
-		write_dir = Path.dirname(write_file)
-		:ok = File.mkdir_p(write_dir)
-		:ok = File.write(write_file, transformed)
+		case Enum.member?(args.excludes, oldfilename) do
+			true  ->
+				:ok
+			false ->
+				indir = args.inputdir
+				outdir = args.outputdir
+		        newext = args.format
+		        oldext = Path.extname(oldfilename)
+		        print_type = args.print_type
+		        outputter = Extensions.get_formatter_module(newext)
+		        language = Extensions.get_lang_module(oldext)
+		        transformed = transform(body, print_type, outputter, language)
+		        write_file = make_write_file(oldfilename, indir, outdir, newext)
+		        write_dir = Path.dirname(write_file)
+		        :ok = File.mkdir_p(write_dir)
+		        :ok = File.write(write_file, transformed)
+		end
 		write_output(t, args)
 	end
 
@@ -64,8 +69,6 @@ the function `make_write_file/4` is also used by the `toc` module
 		newbody = Enum.join(lines, "\n")
 		Kernel.apply(outputter, :wrap, [newbody])
 	end
-
-
 
 end
 ```

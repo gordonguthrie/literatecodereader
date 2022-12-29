@@ -1,21 +1,7 @@
 # LiterateCompiler
 
-**TODO: Add description**
+This is an escript for generating architecture documents.
 
-## Installation
+It has been dogfooded.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `literate_compiler` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:literate_compiler, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/literate_compiler>.
-
+Please see the [Git Hub Pages](http://gordonguthrie.github.io/literate_compiler)

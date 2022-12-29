@@ -39,34 +39,34 @@ The process flow is show below. The script is run with a series of options:
 * what outputs to create
 ^
 
-           Inputs                                                                                          Outputs
-                                                                                                     ╔══════════════════╗
-                                                                                                     ║                  ║
-                                                                                                     ║     List of      ║
-                                            ┌───────────────────────────────────────────────────────▶║      files       ║
-                                            │                                                        ║                  ║
-                                            │                                                        ╚══════════════════╝
-                                            │
-    ┌──────────────────┐                    │                                                        ╔══════════════════╗
-    │                  │                    │                                                        ║                  ║
-    │      Elixir      │───┐                │                                                        ║       html       ║
-    │      Files       │   │                │                                                  ┌────▶║      output      ║
-    │                  │   │                │                                                  │     ║                  ║
-    └──────────────────┘   │                │                                                  │     ╚══════════════════╝
-                           │                │                                                  │
-    ┌──────────────────┐   │   ┏━━━━━━━━━━━━━━━━━━━━━━━━━┓     ┏━━━━━━━━━━━━━━━━━━━━━━━━━┓     │     ╔══════════════════╗
-    │                  │   │   ┃                         ┃     ┃                         ┃     │     ║                  ║
-    │      Erlang      │   │   ┃Tranverse directories and┃     ┃Transform into <comments>┃     │     ║     markdown     ║
-    │      Files       │───┼──▶┃     read the files      ┃────▶┃       and <code>        ┃─────┼────▶║      output      ║
-    │                  │   │   ┃                         ┃     ┃                         ┃     │     ║                  ║
-    └──────────────────┘   │   ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛     ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛     │     ╚══════════════════╝
-                           │                                                                   │
-    ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─    │                                                                   │     ╔══════════════════╗
-                       │   │                                                                   │     ║                  ║
-    │      Other           │                                                                   │     ║      Jekyll      ║
-         Languages     │───┘                                                                   └────▶║    Extensions    ║
-    │                                                                                                ║                  ║
-     ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                             ╚══════════════════╝
+```
+       Inputs                                                                                   Outputs
+
+┌──────────────────┐                                                                      ╔══════════════════╗
+│                  │─┐                                                                    ║                  ║
+│      Elixir      │ │                                                                    ║     List of      ║
+│      Files       │ │           ┌───────────────────────────────────────────────────────▶║      files       ║
+│                  │ │           │                                                        ║                  ║
+└──────────────────┘ │           │                                                        ╚══════════════════╝
+┌──────────────────┐ │           │                                                        ╔══════════════════╗
+│                  │ │           │                                                        ║                  ║
+│      Erlang      │ │           │                                                        ║       HTML       ║
+│      Files       │─┤ ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓ ┌▶║      output      ║
+│                  │ │ ┃    Tranverse     ┃  ┃                  ┃  ┃  Transform into  ┃ │ ║                  ║
+└──────────────────┘ │ ┃ directories and  ┃  ┃Exclude files from┃  ┃  <comments> and  ┃ │ ╚══════════════════╝
+┌──────────────────┐ ├▶┃  read the files  ┃─▶┃    the build     ┃─▶┃      <code>      ┃─┤ ╔══════════════════╗
+│                  │ │ ┃                  ┃  ┃                  ┃  ┃                  ┃ │ ║                  ║
+│  Supercollider   │ │ ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛ │ ║     Markdown     ║
+│      Files       │─┤                                                                  ├▶║      output      ║
+│                  │ │                                                                  │ ║                  ║
+└──────────────────┘ │                                                                  │ ╚══════════════════╝
+┌ ─ ─ ─ ─ ─ ─ ─ ─ ─  │                                                                  │ ╔══════════════════╗
+                   │ │                                                                  │ ║                  ║
+│      Other         │                                                                  │ ║      Jekyll      ║
+     Languages     │─┘                                                                  └▶║    Extensions    ║
+│                                                                                         ║                  ║
+ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                      ╚══════════════════╝
+```
 
 The same technique is used to make the inputs and outputs extensible and you can see it in operation wherever you see code like:
 
@@ -115,6 +115,8 @@ It uses the standard Elixir `Args` to process the arguments
 
 ### Args
 
+The arguments that the script accepts are best observed by [reading the code](./literate_compiler/args.html)
+
 ## Walking The Tree
 
 The code of the Elixir app is written in the filesystem as a set of directories that make
@@ -127,12 +129,12 @@ up a tree
         ├── cli.ex
         ├── extensions.ex
         ├── languages
-        │   ├── elixir_lang.ex
-        │   └── erlang.ex
+        │   ├── elixir_lang.ex
+        │   └── erlang.ex
         ├── languages.ex
         ├── outputter
-        │   ├── html.ex
-        │   └── markdown.ex
+        │   ├── html.ex
+        │   └── markdown.ex
         ├── outputter.ex
         ├── process_files.ex
         ├── toc.ex
@@ -168,18 +170,6 @@ Elixir attaches documentation to the AST during parsing using `@moduledoc` and `
 With levels we can filter our API focussed documentation (Ex_docs will ignore our inline documentation too)
 
 Finding a style (and uses of levels) for your project and language will be up to you.
-
-
-
-# Possible Further Work
-
-It would make sense to have a configuration file with a list of valid source code files to ignore
-The ability to list files is part of that lifecyle.
-That way the architectural documents could focus on the key elements and those bits of the code base
-that are genuine libraries could be documented in the normal fashion.
-
-(Of course the sensible approach would be to break the libraries out into their own repos and
-include them as versioned dependencies, but that often doens't happen).
 
  <div>
  {% for item in site.data.contents.toc %}

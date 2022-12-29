@@ -66,10 +66,15 @@ so you have to write an indenter
 		Enum.reverse(acc)
 	end
 	defp build_tree([{path, file} | t], args, acc) do
-		{page, url} = get_components(path ++ [file], args)
-		len = length(path)
-		newacc = [{ {:url, len}, url}, {:page, page}]
-		build_tree(t, args, newacc ++ acc)
+		case Enum.member?(args.excludes, Path.join(path ++ [file])) do
+			true ->
+				build_tree(t, args, acc)
+			false ->
+				{page, url} = get_components(path ++ [file], args)
+				len = length(path)
+				newacc = [{ {:url, len}, url}, {:page, page}]
+				build_tree(t, args, newacc ++ acc)
+			end
 	end
 
 	defp get_components(path, args) do
@@ -118,13 +123,6 @@ so you have to write an indenter
 ```
 
 The sorter is the hardest bit of code in the whole programme :-)
-
-      ____            _
-     |  _ \          | |
-     | |_) |_ __ ___ | | _____ _ __
-     |  _ <| '__/ _ \| |/ / _ \ '_ \
-     | |_) | | | (_) |   <  __/ | | |
-     |____/|_|  \___/|_|\_\___|_| |_|
 
 ```elixir
 

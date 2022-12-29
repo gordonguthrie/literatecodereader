@@ -32,7 +32,7 @@ It does three things:
 	  langmodule = Extensions.get_lang_module(ext)
 	  case langmodule do
 	  	:none -> :ok
-	  	_     -> IO.inspect(file)
+	  	_     -> IO.puts(file)
 	  end
 	end
 
