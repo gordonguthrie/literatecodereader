@@ -22,14 +22,16 @@ but that's a bit over the top
 
 	def is_comment(line) do
 		{newt, newl} = is_c(String.trim(line))
-		# IO.inspect({ {newt, newl}, line}, label: "in supercollider")
 		case newt do
 			{:code, :code} -> {newt, expand(line)}
 			_              -> {newt, newl}
 		end
 	end
 
-	def comment_level(_), do: 0
+	def comment_level({:code,     _}),       do: 0
+	def comment_level({:module,   _}),       do: 0
+	def comment_level({:comment,  :jekyll}), do: 0
+	def comment_level({:comment,  _}),       do: 1
 
 	def get_css_ext, do: "supercollider"
 
@@ -49,12 +51,12 @@ comments
 			false -> { {:comment,  :open},  r}
 		end
 	end
-	defp is_c(<<"/\*",     r::binary>>), do: { {:comment, :open},  r}
-	defp is_c(<<"\*/",     r::binary>>), do: { {:comment, :close}, r}
-	defp is_c(<<"// ",     r::binary>>), do: { {:comment, :line},  r}
-	defp is_c(<<"//",      r::binary>>), do: { {:comment, :line},  r}
-	defp is_c(<<"/jekyll", r::binary>>), do: { {:comment, :line},  r}
-	defp is_c(c),                        do: { {:code,    :code},  c}
+	defp is_c(<<"/\*",     r::binary>>), do: { {:module, :open},   r}
+	defp is_c(<<"\*/",     r::binary>>), do: { {:module, :close},  r}
+	defp is_c(<<"// ",     r::binary>>), do: { {:comment, :line},   r}
+	defp is_c(<<"//",      r::binary>>), do: { {:comment, :line},   r}
+	defp is_c(<<"/jekyll", r::binary>>), do: { {:comment, :jekyll}, r}
+	defp is_c(c),                        do: { {:code,    :code},   c}
 
 	defp expand(c) do
 		newc = String.replace(c, "{ {", "{ {", [global: true])
