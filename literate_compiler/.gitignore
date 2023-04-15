@@ -26,6 +26,4 @@ literate_compiler-*.tar
 # Temporary files, for example, from tests.
 /tmp/
 
-literate_compiler
-!literate_compiler/
 mix.lock
