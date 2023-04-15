@@ -14,7 +14,6 @@ defmodule LiterateCompiler.Outputter do
 	# with a type that it isn't processing, so we skip that
 	def write_output([[] | t], args), do: write_output(t, args)
 	def write_output([{oldfilename, body} | t], args) do
-		IO.inspect(args, label: "args")
 		case Enum.member?(args.excludes, oldfilename) do
 			true  ->
 				:ok
