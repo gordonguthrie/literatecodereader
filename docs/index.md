@@ -28,17 +28,13 @@ The following constraints inform the design:
 
 ## Input Languages Supported
 
-```elixir
+The following input languages are supported:
 
-# The following input languages are supported:
-
-# * erlang
-# * elixir
-# * markdown
-# * supercollider
-# * ruby
-
-```
+* erlang
+* elixir
+* markdown
+* supercollider
+* ruby
 
 ## Output Formats Supported
 
