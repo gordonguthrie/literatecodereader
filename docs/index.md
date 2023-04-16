@@ -26,7 +26,7 @@ The following constraints inform the design:
 * most of the code that this could be useful for is on GitHub, so this script needs to play nicely with [GitHub Pages](https://pages.github.com/) which use [Jekyll](https://jekyllrb.com/)
 ^
 
-## Languages Supported
+## Input Languages Supported
 
 ```elixir
 
@@ -37,6 +37,18 @@ The following constraints inform the design:
 # * markdown
 # * supercollider
 # * ruby
+
+```
+
+## Output Formats Supported
+
+```elixir
+
+# The following output languages are supported:
+
+# * plain markdown
+# * markdown-for-jekyll (generates table of contents)
+# * html
 
 ```
 
