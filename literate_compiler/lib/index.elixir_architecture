@@ -26,13 +26,13 @@
 
 #### Languages Supported
 
-The following input languages are supported:
+# The following input languages are supported:
 
-* erlang
-* elixir
-* markdown
-* supercollider
-* ruby
+# * erlang
+# * elixir
+# * markdown
+# * supercollider
+# * ruby
 
 #### Process flow
 
