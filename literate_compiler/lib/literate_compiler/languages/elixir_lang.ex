@@ -46,7 +46,7 @@ defmodule LiterateCompiler.Languages.Elixir_lang do
 	defp expand(c) do
 		newc = String.replace(c, "{{", "{ {", [global: true])
 		case Regex.match?(~r/{{/, newc) do
-			true -> expand(newc)
+			true  -> expand(newc)
 			false -> newc
 		end
 	end
