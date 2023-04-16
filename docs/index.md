@@ -38,15 +38,11 @@ The following input languages are supported:
 
 ## Output Formats Supported
 
-```elixir
+The following output languages are supported:
 
-# The following output languages are supported:
-
-# * plain markdown
-# * markdown-for-jekyll (generates table of contents)
-# * html
-
-```
+* plain markdown
+* markdown-for-jekyll (generates table of contents)
+* html
 
 ## Process flow
 
