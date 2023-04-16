@@ -25,6 +25,8 @@ toc:
         url:  ./literate_compiler/languages/erlang.html
       - page: literate_compiler/languages - markdown.ex
         url:  ./literate_compiler/languages/markdown.html
+      - page: literate_compiler/languages - ruby.ex
+        url:  ./literate_compiler/languages/ruby.html
       - page: literate_compiler/languages - supercollider.ex
         url:  ./literate_compiler/languages/supercollider.html
       - page: literate_compiler/outputter - html.ex
