@@ -21,7 +21,6 @@ defmodule LiterateCompiler.Languages.Ruby do
 	def comment_level({:code,    _}), do: 0
 	def comment_level({:comment, _}), do: 0
 	def comment_level({:module,  _}), do: 1
-	def comment_level({:fn,      _}), do: 2
 
 	def get_css_ext, do: "ruby"
 
@@ -34,8 +33,8 @@ defmodule LiterateCompiler.Languages.Ruby do
 ## * and in the second we don't - this enables continuous headers
 
 	defp is_c(<<"=begin",  r::binary>>), do: {{:module,  :open},  r}
-	defp is_c(<<"## ",     r::binary>>), do: {{:fn,      :open},  r}
-	defp is_c(<<"##",      r::binary>>), do: {{:fn,      :line},  r}
+	defp is_c(<<"## ",     r::binary>>), do: {{:comment, :open},  r}
+	defp is_c(<<"##",      r::binary>>), do: {{:comment, :line},  r}
 	defp is_c(<<"#jekyll", r::binary>>), do: {{:comment, :line},  r}
 	defp is_c(<<"=end",    r::binary>>), do: {{:comment, :close}, r}
 	defp is_c(c),                        do: {{:code,    :code},  c}

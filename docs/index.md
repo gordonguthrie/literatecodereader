@@ -26,6 +26,20 @@ The following constraints inform the design:
 * most of the code that this could be useful for is on GitHub, so this script needs to play nicely with [GitHub Pages](https://pages.github.com/) which use [Jekyll](https://jekyllrb.com/)
 ^
 
+## Languages Supported
+
+```elixir
+
+The following input languages are supported:
+
+* erlang
+* elixir
+* markdown
+* supercollider
+* ruby
+
+```
+
 ## Process flow
 
 ### Overview

@@ -107,7 +107,7 @@ defmodule LiterateCompiler.ProcessFiles do
 				comments = {{ty, :block}, Enum.reverse([{newt, newl} | acc])}
 				{comments, t}
 			_ ->
-			 	newacc = [{newt, newl} | acc]
+			 	newacc = [{newt, h} | acc]
 				gobble(t, ty, langmodule, newacc)
 		end
 	end
