@@ -78,7 +78,10 @@ defmodule LiterateCompiler.TOC do
 
 		# make the URL
 		relpath = Enum.reverse(rest)
-		[_, _ | trimmedrelpath] = relpath
+		trimmedrelpath = case relpath do
+			[_, _ | t] -> t
+			[_    | t] -> t
+		end
 		root = Path.rootname(file)
 		file = Enum.join([root, ".", "html"])
 		url  = Path.join(["."] ++ trimmedrelpath ++ [file])

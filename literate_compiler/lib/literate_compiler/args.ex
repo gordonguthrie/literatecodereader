@@ -91,9 +91,9 @@ defmodule LiterateCompiler.Args do
       "Examples:",
       "./literate_compiler -o /some/dir/for/output",
       "./literate_compiler --outputdir /some/dir/for/output",
-      "./literate_compiler -i /some/dir/for/output -o /some/dir/for/output",
+      "./literate_compiler -i /some/dir/for/input -o /some/dir/for/output",
       "./literate_compiler --help",
-      "./literate_compiler -i /some/dir/for/output -l",
+      "./literate_compiler -i /some/dir/for/input -l",
       ""
     ]
     for x <- lines, do: IO.puts(x)
