@@ -6,6 +6,7 @@ defmodule LiterateCompiler.TOC do
 
 	@empty_accumulator []
 
+	alias LiterateCompiler.Extensions
 	alias LiterateCompiler.Outputter
 
 #### Public API
@@ -53,15 +54,23 @@ defmodule LiterateCompiler.TOC do
 		Enum.reverse(acc)
 	end
 	defp build_tree([{path, file} | t], args, acc) do
-		case Enum.member?(args.excludes, Path.join(path ++ [file])) do
-			true ->
-				build_tree(t, args, acc)
-			false ->
-				{page, url} = get_components(path ++ [file], args)
-				len = length(path)
-				newacc = [{{:url, len}, url}, {:page, page}]
-				build_tree(t, args, newacc ++ acc)
+		fullpath = Path.join(path ++ [file])
+		ext = Path.extname(file)
+		langmodule = Extensions.get_lang_module(ext)
+		# dependencies and builds bring in different file types, we don't want them in
+		# the contents page
+		case langmodule do
+	  		:none -> build_tree(t, args, acc)
+		  	_     -> case Enum.member?(args.excludes, fullpath) do
+						true ->
+							build_tree(t, args, acc)
+						false ->
+							{page, url} = get_components(path ++ [file], args)
+							len = length(path)
+							newacc = [{{:url, len}, url}, {:page, page}]
+							build_tree(t, args, newacc ++ acc)
 			end
+		end
 	end
 
 	defp get_components(path, args) do
