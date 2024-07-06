@@ -20,7 +20,7 @@ defmodule LiterateCompiler.Tree do
   defp walk_tree([h | t], excludelist, fun, acc) do
     newacc = case File.dir?(h) do
       true  ->
-        case Enum.member?(excludelist, h) do
+        case Enum.member?(excludelist, h <> "/*") do
           true  ->
             walk_tree(t, excludelist, fun, acc)
           false ->
