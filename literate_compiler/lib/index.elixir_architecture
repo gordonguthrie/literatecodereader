@@ -159,7 +159,7 @@ def get_lang_module(".erl"),                 do: LiterateCompiler.Languages.Erla
 
 ## There is a problem in that `Jekyll` thinks two curly braces without a space (so like '{ {' but without the space, obvs) is for it and Elixir has a lot of them so a special processing route has to be found.
 
-## Because of the clash in needs between **document me as a library** and **show me the architecture** it is possible for this script to skip some comments **if the language processor supports it**. See [elixir_lang.ex](./literate_compiler/languages/elixir_lang.html) for details.Elixir attaches documentation to the AST during parsing using `@moduledoc` and `@doc` attributes. (See [Writing Elixir Documentation](https://hexdocs.pm/elixir/writing-documentation.html) for details). With levels we can filter our API focussed documentation (Ex_docs will ignore our inline documentation too).
+## Because of the clash in needs between **document me as a library** and **show me the architecture** it is possible for this script to skip some comments **if the language processor supports it**. See [elixir_lang.ex](./literate_compiler/languages/elixir_lang.html) for details. Elixir attaches documentation to the AST during parsing using `@moduledoc` and `@doc` attributes. (See [Writing Elixir Documentation](https://hexdocs.pm/elixir/writing-documentation.html) for details). With levels we can filter our API focussed documentation (Ex_docs will ignore our inline documentation too).
 
 ## Finding a style (and uses of levels) for your project and language will be up to you.
 

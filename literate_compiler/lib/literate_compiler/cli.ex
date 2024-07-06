@@ -36,13 +36,13 @@ defmodule LiterateCompiler.CLI do
       IO.puts("run ./literate_compiler -h for help")
   end
   defp run(parsedargs) when parsedargs.print_files do
-      Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.list_file/1)
+      Tree.walk_tree([parsedargs.inputdir], parsedargs.exclude, &ProcessFiles.list_file/1)
     end
   defp run(parsedargs) do
-      files = Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.process_file/1)
+      files = Tree.walk_tree([parsedargs.inputdir], parsedargs.exclude, &ProcessFiles.process_file/1)
       :ok = Outputter.write_output(files, parsedargs)
       case parsedargs.make_jekyll do
-        true  -> jekyll = Tree.walk_tree([parsedargs.inputdir], &ProcessFiles.make_jekyll_contents/1)
+        true  -> jekyll = Tree.walk_tree([parsedargs.inputdir], parsedargs.exclude, &ProcessFiles.make_jekyll_contents/1)
                  TOC.make_toc(jekyll, parsedargs)
         false -> :ok
       end
