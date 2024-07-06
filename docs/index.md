@@ -70,7 +70,7 @@ The process flow is show below. The script is run with a series of options:
  │      Files       │─┤ ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━━┓ ┌▶║      output      ║
  │                  │ │ ┃                  ┃  ┃                  ┃  ┃                  ┃ │ ║                  ║
  └──────────────────┘ │ ┃    Tranverse     ┃  ┃Exclude files from┃  ┃  Transform into  ┃ │ ╚══════════════════╝
- ┌──────────────────┐ ├▶┃ directories and  ┃─▶┃the artchitecture ┃─▶┃  <comments> and  ┃─┤ ╔══════════════════╗
+ ┌──────────────────┐ ├▶┃ directories and  ┃─▶┃ the architecture ┃─▶┃  <comments> and  ┃─┤ ╔══════════════════╗
  │                  │ │ ┃  read the files  ┃  ┃ documents build  ┃  ┃      <code>      ┃ │ ║                  ║
  │  Supercollider   │ │ ┃                  ┃  ┃                  ┃  ┃                  ┃ │ ║     Markdown     ║
  │      Files       │─┤ ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━━┛ ├▶║      output      ║
