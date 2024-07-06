@@ -23,7 +23,7 @@ defmodule LiterateCompiler.Tree do
         wildcard = Path.join(h, "*")
         case Enum.member?(excludelist, wildcard) do
           true  ->
-            walk_tree(t, excludelist, fun, acc)
+            acc
           false ->
             entries = Path.wildcard(wildcard)
             Enum.flat_map(entries, fn x -> walk_tree([x], excludelist, fun, acc) end)

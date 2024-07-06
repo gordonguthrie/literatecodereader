@@ -55,6 +55,7 @@ defmodule LiterateCompiler.TOC do
 	end
 	defp build_tree([{path, file} | t], args, acc) do
 		fullpath = Path.join(path ++ [file])
+		IO.puts(fullpath)
 		ext = Path.extname(file)
 		langmodule = Extensions.get_lang_module(ext)
 		# dependencies and builds bring in different file types, we don't want them in
