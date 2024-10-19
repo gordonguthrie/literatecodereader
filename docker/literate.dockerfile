@@ -1,4 +1,4 @@
-FROM elixir:1.14.2
+FROM elixir:1.17.1
 
 USER root
 

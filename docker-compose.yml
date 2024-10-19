@@ -8,16 +8,9 @@ services:
       context: ./
     environment:
       DISPLAY: host.docker.internal:0
-    environment:
-      - SSH_AUTH_SOCK=/usr/bin/ssh-agent
     ports:
       - "5001:5000"
     volumes:
       - type: bind
         source: ./
         target: /literate_compiler
-      - ${SSH_AUTH_SOCK}:/ssh-agent
-      # for xwindows
-      #- type: bind
-      #  source: /tmp/.X11-unix
-      #  target: /tmp/.X11-unix
