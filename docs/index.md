@@ -78,8 +78,8 @@ The following output languages are supported:
 
 
 
-html mode is a bit sucky. It expects a hightlight javascript package in each directory.
-You can find that package in the git of this app
+`html` mode is a bit sucky. It expects a hightlight javascript package in each directory.
+You can find that package in the [git of this app](https://github.com/gordonguthrie/literatecodereader/tree/main/literate_compiler/priv)
 
 
 
@@ -164,7 +164,9 @@ writing a new module under in the `LiterateCompiler.Languages` namespace.
 
 
 
-*Caveat*: we load highlight JS for each language seperately on each page - new language, new highlight js line for html
+*Caveat*: we use a custom highlight javascript package to cover all the languages.
+You will need to generate a new version to add a new language.
+You can do it on the [highlightjs download page](https://highlightjs.org/download).
 
 
 
