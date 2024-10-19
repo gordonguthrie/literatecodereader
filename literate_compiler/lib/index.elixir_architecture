@@ -42,6 +42,9 @@
 ## * markdown-for-jekyll (generates table of contents)
 ## * html
 
+## html mode is a bit sucky. It expects a hightlight javascript package in each directory.
+## You can find that package in the git of this app
+
 #### Process flow
 
 ##### Overview
@@ -101,6 +104,8 @@ def get_lang_module(".erl"),                 do: LiterateCompiler.Languages.Erla
 ## To extend this script to add other languages it is a simple matter of adding extra lines here and
 ## writing a new module under in the `LiterateCompiler.Languages` namespace.
 
+## *Caveat*: we load highlight JS for each language seperately on each page - new language, new highlight js line for html
+
 ## (Read and compare [LiterateCompiler.Languages.Elixir_lang](literate_compiler/languages/elixir_lang.html) and [LiterateCompiler.Languages.Erlang](literate_compiler/languages/erlang.html))
 
 ## On the way out, the same applies. We specify an output format in the command line args and then there is a outputter lookup.
@@ -159,7 +164,9 @@ def get_lang_module(".erl"),                 do: LiterateCompiler.Languages.Erla
 
 ## There is a problem in that `Jekyll` thinks two curly braces without a space (so like '{ {' but without the space, obvs) is for it and Elixir has a lot of them so a special processing route has to be found.
 
-## Because of the clash in needs between **document me as a library** and **show me the architecture** it is possible for this script to skip some comments **if the language processor supports it**. See [elixir_lang.ex](./literate_compiler/languages/elixir_lang.html) for details. Elixir attaches documentation to the AST during parsing using `@moduledoc` and `@doc` attributes. (See [Writing Elixir Documentation](https://hexdocs.pm/elixir/writing-documentation.html) for details). With levels we can filter our API focussed documentation (Ex_docs will ignore our inline documentation too).
+## Because of the clash in needs between **document me as a library** and **show me the architecture** it is possible for this script to skip some comments **if the language processor supports it**.
+
+## See [the elixir language module](./literate_compiler/languages/elixir_lang.html) for details. Elixir attaches documentation to the AST during parsing using `@moduledoc` and `@doc` attributes. (See [Writing Elixir Documentation](https://hexdocs.pm/elixir/writing-documentation.html) for details). With levels we can filter our API focussed documentation (Ex_docs will ignore our inline documentation too).
 
 ## Finding a style (and uses of levels) for your project and language will be up to you.
 

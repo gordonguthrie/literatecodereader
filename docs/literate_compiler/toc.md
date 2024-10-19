@@ -7,12 +7,15 @@ defmodule LiterateCompiler.TOC do
 
 # Purpose
 
+
+
 This generates a table of contents in yaml for Jekyll
 
 ```elixir
 
 	@empty_accumulator []
 
+	alias LiterateCompiler.Extensions
 	alias LiterateCompiler.Outputter
 
 ```
@@ -41,6 +44,8 @@ This generates a table of contents in yaml for Jekyll
 
 ## Private Fns
 
+
+
 yaml is a pain in the arse, white space matters language
 so you have to write an indenter
 
@@ -68,15 +73,24 @@ so you have to write an indenter
 		Enum.reverse(acc)
 	end
 	defp build_tree([{path, file} | t], args, acc) do
-		case Enum.member?(args.excludes, Path.join(path ++ [file])) do
-			true ->
-				build_tree(t, args, acc)
-			false ->
-				{page, url} = get_components(path ++ [file], args)
-				len = length(path)
-				newacc = [{ {:url, len}, url}, {:page, page}]
-				build_tree(t, args, newacc ++ acc)
+		fullpath = Path.join(path ++ [file])
+		IO.puts(fullpath)
+		ext = Path.extname(file)
+		langmodule = Extensions.get_lang_module(ext)
+		# dependencies and builds bring in different file types, we don't want them in
+		# the contents page
+		case langmodule do
+	  		:none -> build_tree(t, args, acc)
+		  	_     -> case Enum.member?(args.excludes, fullpath) do
+						true ->
+							build_tree(t, args, acc)
+						false ->
+							{page, url} = get_components(path ++ [file], args)
+							len = length(path)
+							newacc = [{ {:url, len}, url}, {:page, page}]
+							build_tree(t, args, newacc ++ acc)
 			end
+		end
 	end
 
 	defp get_components(path, args) do
@@ -93,7 +107,10 @@ so you have to write an indenter
 
 		# make the URL
 		relpath = Enum.reverse(rest)
-		[_, _ | trimmedrelpath] = relpath
+		trimmedrelpath = case relpath do
+			[_, _ | t] -> t
+			[_    | t] -> t
+		end
 		root = Path.rootname(file)
 		file = Enum.join([root, ".", "html"])
 		url  = Path.join(["."] ++ trimmedrelpath ++ [file])

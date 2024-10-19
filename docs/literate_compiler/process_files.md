@@ -7,10 +7,16 @@ defmodule LiterateCompiler.ProcessFiles do
 
 # Purpose
 
+
+
 this module provides functions to be passed into the tree walker
 to process the files it finds
 
+
+
 It does three things:
+
+
 
 * simply list the files
 * convert them into either html or markdown
@@ -69,9 +75,13 @@ processor on the contents
 
 the way comments are written various from language to language
 
+
+
 * in some languages every comment line starts with the same character
 * some languages have start and end delimiters for comments
 ^
+
+
 
 This handles both types by gobbling multiline comments
 (if the language processor tells it to)

@@ -7,8 +7,12 @@ defmodule LiterateCompiler.Tree do
 
 # Purpose
 
+
+
 This is a generic tree walking function
 given a root directory it walks over all the sub directories
+
+
 
 The first arguement of the public api is the root directory
 and the second is a function of arity 1 which is called when a file is found
@@ -23,7 +27,7 @@ and the second is a function of arity 1 which is called when a file is found
 
 ```elixir
 
-  def walk_tree(directorylist, fun), do: walk_tree(directorylist, fun, @empty_accumulator)
+  def walk_tree(directorylist, excludelist, fun), do: walk_tree(directorylist, excludelist, fun, @empty_accumulator)
 
 ```
 
@@ -31,16 +35,22 @@ and the second is a function of arity 1 which is called when a file is found
 
 ```elixir
 
-  defp walk_tree([], _fun, acc), do: acc
-  defp walk_tree([h | t], fun, acc) do
+  defp walk_tree([], _excludelist, _fun, acc), do: acc
+  defp walk_tree([h | t], excludelist, fun, acc) do
     newacc = case File.dir?(h) do
-      true  -> wildcard = Path.join(h, "*")
-               entries = Path.wildcard(wildcard)
-               Enum.flat_map(entries, fn x -> walk_tree([x], fun, acc) end)
+      true  ->
+        wildcard = Path.join(h, "*")
+        case Enum.member?(excludelist, wildcard) do
+          true  ->
+            acc
+          false ->
+            entries = Path.wildcard(wildcard)
+            Enum.flat_map(entries, fn x -> walk_tree([x], excludelist, fun, acc) end)
+          end
       false -> file = fun.(h)
                [file | acc]
     end
-    walk_tree(t, fun, newacc)
+    walk_tree(t, excludelist, fun, newacc)
   end
 
 end

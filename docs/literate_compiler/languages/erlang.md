@@ -7,9 +7,15 @@ defmodule LiterateCompiler.Languages.Erlang do
 
 # Purpose
 
+
+
 Processes Erlang files
 
+
+
 ## Public API
+
+
 
 The fixed API could have been enforced as a [behaviour](https://hexdocs.pm/elixir/1.4.5/behaviours.html)
 but that's a bit over the top
@@ -35,6 +41,8 @@ but that's a bit over the top
 ```
 
 ## Private API
+
+
 
 in the private function `is_c` take special notice of the doubled handling of
 comments

@@ -1,5 +1,7 @@
 defmodule LiterateCompiler.Outputter.HTML do
 
+    alias Phoenix.HTML
+
 ### Purpose
 
 ## is the outputter for HTML - if you want to use GitHub pages
@@ -14,13 +16,11 @@ defmodule LiterateCompiler.Outputter.HTML do
 ## This module decorates the code snippets with classes to use with
 ## code highlighters
 
-##       _   _       _     ______ _       _     _              _
-##      | \ | |     | |   |  ____(_)     (_)   | |            | |
-##      |  \| | ___ | |_  | |__   _ _ __  _ ___| |__   ___  __| |
-##      | . ` |/ _ \| __| |  __| | | '_ \| / __| '_ \ / _ \/ _` |
-##      | |\  | (_) | |_  | |    | | | | | \__ \ | | |  __/ (_| |
-##      |_| \_|\___/ \__| |_|    |_|_| |_|_|___/_| |_|\___|\__,_|
-
+    def format({:markdown, level}, print_type, "```" <> contents, _language)  when level <= print_type  do
+        trimmed = String.trim(contents, "```")
+        {:safe, safe} = HTML.html_escape(trimmed)
+        "<div class='our_pre'>" <> List.to_string(safe) <> "</div>"
+    end
 	def format({:markdown, level}, print_type, contents, _language)  when level <= print_type  do
 		:markdown.conv_utf8(contents)
 	end
@@ -28,20 +28,27 @@ defmodule LiterateCompiler.Outputter.HTML do
         css_extension = ""
         format_as_code(contents, css_extension)
     end
+    def format({:code, _}, _print_level, "\r", _language), do: ""
 	def format({:code, _}, _print_level, contents, language) do
+        trimmed = String.trim(contents)
 		css_extension = Kernel.apply(language, :get_css_ext, [])
-        format_as_code(contents, css_extension)
+        format_as_code(trimmed, css_extension)
 	end
+
+    ### We just build a webpage in sections as you would expect and then join them
 
 	def wrap(contents) do
 		Enum.join([
 					"<html>\n",
 					"<head>\n",
+                    "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />",
+                    setup_highlight(),
 					css(),
 					"</head>\n",
 					"<body>\n",
 					contents,
 					"</body>\n",
+                    run_highlight(),
 					"</html>"
 				])
 	end
@@ -49,19 +56,25 @@ defmodule LiterateCompiler.Outputter.HTML do
 #### Private Fns
 
     def format_as_code(contents, ext) do
-        Enum.join(["<pre class=\"", ext, "\"><code>\n", contents, "</code></pre>\n"])
+        Enum.join(["<pre><code class=\"language-", ext, "\">\n", contents, "</code></pre>\n"])
     end
 
-## this is all a bit shonky
+#### These functions generate inline CSS, the external JS on the pages and also
+#### the final invocation of javascript to apply code highlighting
 
-##       _   _       _     ______ _       _     _              _
-##      | \ | |     | |   |  ____(_)     (_)   | |            | |
-##      |  \| | ___ | |_  | |__   _ _ __  _ ___| |__   ___  __| |
-##      | . ` |/ _ \| __| |  __| | | '_ \| / __| '_ \ / _ \/ _` |
-##      | |\  | (_) | |_  | |    | | | | | \__ \ | | |  __/ (_| |
-##      |_| \_|\___/ \__| |_|    |_|_| |_|_|___/_| |_|\___|\__,_|
+### The `highlight.js` function adds a complete minified js library for code hightlighting to every page
+### If you are development minded you might want to optimise that.
+### An alternative option would be to create a minified library and host it somewhere but...
+    defp run_highlight() do
+        "<script>hljs.highlightAll();</script>"
+    end
 
-
+    defp setup_highlight() do
+"""
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="./highlight.min.js"></script>
+"""
+    end
 
 	defp css() do
 """
@@ -69,14 +82,13 @@ defmodule LiterateCompiler.Outputter.HTML do
 html, body {
     padding: 2.5em;
     margin: auto;
-    max-width: 48em;
+    max-width: 98%;
 }
 
 body {
     font: 1.3em Palatino, Times;
     color: #333;
     line-height: 1.3;
-    text-align: justify;
 }
 
 img {
@@ -112,13 +124,13 @@ h1 {
 
 h2 {
     font-weight: normal;
-    margin-top: 3em;
+    margin-top: 1.5em;
 }
 
 h3 {
     font-weight: normal;
     font-style: italic;
-    margin-top: 3em;
+    margin-top: 1.5em;
 }
 
 p {
@@ -143,6 +155,16 @@ blockquote {
     border-left: 1px solid #DDD;
 }
 
+.our_pre {
+    font-family: "Consolas", "Menlo", "Monaco", monospace, serif;
+    font-size: 0.9em;
+    white-space: pre;
+    background: #f3f3f3;
+    color: #444;
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+}
 code {
     font-family: "Consolas", "Menlo", "Monaco", monospace, serif;
     font-size: 0.9em;
@@ -180,7 +202,7 @@ hr {
 /* Small screens
 -------------------------------------------------------- */
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 900px) {
     html, body {
         padding-left: 1.2em;
         padding-right: 1.2em;

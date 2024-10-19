@@ -7,11 +7,17 @@ defmodule LiterateCompiler.Outputter.Markdown do
 
 # Purpose
 
+
+
 This is the outputter for markdown
 It marks up the code with a langauge prefix for code highlighting
 
+
+
 The fixed API could have been enforced as a [behaviour](https://hexdocs.pm/elixir/1.4.5/behaviours.html)
 but that's a bit over the top
+
+
 
 ## Public API
 

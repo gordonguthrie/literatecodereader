@@ -7,6 +7,8 @@ defmodule LiterateCompiler.Languages.Markdown do
 
 # Purpose
 
+
+
 Processes Markdown files as input
 
 ```elixir
@@ -19,6 +21,8 @@ Processes Markdown files as input
 ```
 
 ## Public API
+
+
 
 The fixed API could have been enforced as a [behaviour](https://hexdocs.pm/elixir/1.4.5/behaviours.html)
 but that's a bit over the top

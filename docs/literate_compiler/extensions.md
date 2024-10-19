@@ -7,6 +7,8 @@ defmodule LiterateCompiler.Extensions do
 
 # Purpose
 
+
+
 This module turns file system extension into module names for use
 in both the file processing and output parts of the script.
 

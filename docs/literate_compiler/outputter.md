@@ -7,6 +7,8 @@ defmodule LiterateCompiler.Outputter do
 
 # Purpose
 
+
+
 writes the output for html and markdown, invoking the specific
 formatting functions from the appropriate submodules
 

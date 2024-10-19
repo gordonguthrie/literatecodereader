@@ -7,14 +7,22 @@ defmodule LiterateCompiler.Args do
 
 # Purpose
 
+
+
 A standard Elixir library has collected and marshalled all the arguments.
 This module verifies them and ensures that the set of arguments passed
 are coherent.
 
+
+
 # Data Structures
+
+
 
 This arguments structure is populated when the CLI is called and
 is then passed around the various arguments
+
+
 
 When the inputs are validated, any errors are written to the `errors` key
 The consumer of this argument struct checks if it is error free
@@ -36,6 +44,8 @@ The consumer of this argument struct checks if it is error free
 ```
 
 ## Public API
+
+
 
 Three simple self-explanatory functions.
 
@@ -62,7 +72,8 @@ Three simple self-explanatory functions.
       "                which path to and name of an exclude file",
       "                which contains a list of modules to exclude",
       "                one per line, path relative to the directory this script runs in",
-      "                exclude files can be generated with the -l --list option",
+      "                exclude files can be generated with the -l --list option.",
+      "                This supports simple directory wildcards of the form 'path/to/a/dir/*",
       "                (optional - default .literate_compiler.exclude in the current directory)",
       "",
       "-f --format     takes 1 argument, one of: [markdown | html]",
@@ -102,9 +113,9 @@ Three simple self-explanatory functions.
       "Examples:",
       "./literate_compiler -o /some/dir/for/output",
       "./literate_compiler --outputdir /some/dir/for/output",
-      "./literate_compiler -i /some/dir/for/output -o /some/dir/for/output",
+      "./literate_compiler -i /some/dir/for/input -o /some/dir/for/output",
       "./literate_compiler --help",
-      "./literate_compiler -i /some/dir/for/output -l",
+      "./literate_compiler -i /some/dir/for/input -l",
       ""
     ]
     for x <- lines, do: IO.puts(x)
@@ -119,6 +130,8 @@ Three simple self-explanatory functions.
 ```
 
 ## Private Functions
+
+
 
 `parse_args` places the inputs into the data structure
 when the arguments have been consumed it calles `validate` on the data structure
