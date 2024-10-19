@@ -79,7 +79,7 @@ The following output languages are supported:
 
 
 `html` mode is a bit sucky. It expects a hightlight javascript package in each directory.
-You can find that package in the [git of this app](https://github.com/gordonguthrie/literatecodereader/tree/main/literate_compiler/priv)
+You can find that package in the [git of this app](https://github.com/gordonguthrie/literatecodereader/tree/main/literate_compiler/priv).
 
 
 
