@@ -42,8 +42,8 @@
 ## * markdown-for-jekyll (generates table of contents)
 ## * html
 
-## html mode is a bit sucky. It expects a hightlight javascript package in each directory.
-## You can find that package in the git of this app
+## `html` mode is a bit sucky. It expects a hightlight javascript package in each directory.
+## You can find that package in the [git of this app](https://github.com/gordonguthrie/literatecodereader/tree/main/literate_compiler/priv)
 
 #### Process flow
 
@@ -104,7 +104,9 @@ def get_lang_module(".erl"),                 do: LiterateCompiler.Languages.Erla
 ## To extend this script to add other languages it is a simple matter of adding extra lines here and
 ## writing a new module under in the `LiterateCompiler.Languages` namespace.
 
-## *Caveat*: we load highlight JS for each language seperately on each page - new language, new highlight js line for html
+## *Caveat*: we use a custom highlight javascript package to cover all the languages.
+## You will need to generate a new version to add a new language.
+## You can do it on the [highlightjs download page](https://highlightjs.org/download).
 
 ## (Read and compare [LiterateCompiler.Languages.Elixir_lang](literate_compiler/languages/elixir_lang.html) and [LiterateCompiler.Languages.Erlang](literate_compiler/languages/erlang.html))
 
